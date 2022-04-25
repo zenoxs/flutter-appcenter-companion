@@ -1,3 +1,4 @@
+import 'package:appcenter_companion/presentation/home/authentication_dialog.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -55,11 +56,11 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         actions: kIsWeb
             ? null
             : DragToMoveArea(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [Spacer(), WindowButtons()],
-                ),
-              ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [Spacer(), WindowButtons()],
+          ),
+        ),
       ),
       pane: NavigationPane(
         selected: index,
@@ -143,14 +144,13 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         autoSuggestBoxReplacement: const Icon(FluentIcons.search),
         footerItems: [
           PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.settings),
-            title: const Text('Settings'),
-          ),
           _LinkPaneItemAction(
-            icon: const Icon(FluentIcons.open_source),
-            title: const Text('Source code'),
-            link: 'https://github.com/bdlukaa/fluent_ui',
+            icon: const Icon(FluentIcons.user_sync),
+            title: const Text('Login'),
+            action: () => showDialog(
+              context: context,
+              builder: (context) => AuthenticationDialog(),
+            ),
           ),
         ],
       ),
@@ -193,7 +193,8 @@ class WindowButtons extends StatelessWidget {
 class _LinkPaneItemAction extends PaneItem {
   _LinkPaneItemAction({
     required Widget icon,
-    required this.link,
+    this.link,
+    this.action,
     title,
     infoBadge,
     focusNode,
@@ -206,7 +207,8 @@ class _LinkPaneItemAction extends PaneItem {
           autofocus: autofocus,
         );
 
-  final String link;
+  final String? link;
+  final VoidCallback? action;
 
   @override
   Widget build(
@@ -217,16 +219,27 @@ class _LinkPaneItemAction extends PaneItem {
     bool showTextOnTop = true,
     bool? autofocus,
   }) {
-    return Link(
-      uri: Uri.parse(link),
-      builder: (context, followLink) => super.build(
-        context,
-        selected,
-        followLink,
-        displayMode: displayMode,
-        showTextOnTop: showTextOnTop,
-        autofocus: autofocus,
-      ),
+    if (link != null) {
+      return Link(
+        uri: Uri.parse(link!),
+        builder: (context, followLink) => super.build(
+          context,
+          selected,
+          followLink,
+          displayMode: displayMode,
+          showTextOnTop: showTextOnTop,
+          autofocus: autofocus,
+        ),
+      );
+    }
+
+    return super.build(
+      context,
+      selected,
+      action,
+      displayMode: displayMode,
+      showTextOnTop: showTextOnTop,
+      autofocus: autofocus,
     );
   }
 }

@@ -9,15 +9,18 @@ class AppcenterHttp extends DioForNative {
         );
 
   Future<bool> checkTokenValidity(String token) async {
-    final data = await get(
-      'user/metadata/optimizely',
+    return get(
+      'user',
       options: Options(
         headers: {
-          'X-API-Token': token,
+          'content-type': 'application/json',
+          'x-api-token': token,
         },
       ),
-    );
-    print(data);
-    return data.statusCode == 200;
+    ).then((value) {
+      return value.data != null;
+    }).catchError((error) {
+      return false;
+    });
   }
 }

@@ -7,7 +7,8 @@ class Environment {
 
   factory Environment.fromEnvironment() {
     return Environment(
-      appcenterApiUrl: const String.fromEnvironment('APPCENTER_API_URL', defaultValue: 'https://api.appcenter.ms/v0.1'),
+      appcenterApiUrl: const String.fromEnvironment('APPCENTER_API_URL',
+          defaultValue: 'https://api.appcenter.ms/v0.1/'),
     );
   }
 }

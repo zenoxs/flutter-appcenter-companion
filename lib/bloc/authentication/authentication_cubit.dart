@@ -6,7 +6,6 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'authentication_cubit.freezed.dart';
-
 part 'authentication_state.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
@@ -40,7 +39,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> login(String token) async {
+    _tokenRepository.clearToken();
     final isValid = await _http.checkTokenValidity(token);
+    print(isValid);
     if (isValid) {
       _tokenRepository.setToken(token);
     }

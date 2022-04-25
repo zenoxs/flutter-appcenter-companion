@@ -1,5 +1,6 @@
 import 'package:appcenter_companion/bloc/authentication/authentication_cubit.dart';
 import 'package:appcenter_companion/environment.dart';
+import 'package:appcenter_companion/interceptors/authentication_interceptor.dart';
 import 'package:appcenter_companion/presentation/app.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 import 'package:appcenter_companion/repositories/token_repository.dart';
@@ -39,7 +40,6 @@ Future<void> main() async {
         windowButtonVisibility: false,
       );
       await windowManager.setMinimumSize(const Size(755, 545));
-      await windowManager.center();
       await windowManager.show();
       await windowManager.setPreventClose(true);
       await windowManager.setSkipTaskbar(false);
@@ -49,6 +49,11 @@ Future<void> main() async {
   final Environment environment = Environment.fromEnvironment();
   final AppcenterHttp appcenterHttp = AppcenterHttp(environment);
   final TokenRepository tokenRepository = TokenRepository();
+
+  // set up interceptors
+  final AuthenticationInterceptor authenticationInterceptor =
+      AuthenticationInterceptor(tokenRepository);
+  appcenterHttp.interceptors.add(authenticationInterceptor);
 
   final AuthenticationCubit authenticationCubit = AuthenticationCubit(
     appcenterHttp,
