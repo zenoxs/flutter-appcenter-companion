@@ -56,11 +56,11 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         actions: kIsWeb
             ? null
             : DragToMoveArea(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [Spacer(), WindowButtons()],
-          ),
-        ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [Spacer(), WindowButtons()],
+                ),
+              ),
       ),
       pane: NavigationPane(
         selected: index,
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
             title: const Text('Login'),
             action: () => showDialog(
               context: context,
-              builder: (context) => AuthenticationDialog(),
+              builder: (context) => const AuthenticationDialog(),
             ),
           ),
         ],

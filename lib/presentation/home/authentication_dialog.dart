@@ -21,13 +21,26 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-              'Please enter your API token. It can be found in the API section of your account settings.'),
+            'Please enter your API token. It can be found in the API section of your account settings.',
+          ),
           const SizedBox(height: 16),
           TextBox(
             autofocus: true,
             controller: _tokenController,
             header: 'API Token',
             placeholder: 'xaprjx4nyuu78w....',
+          ),
+          const SizedBox(height: 16),
+          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+            builder: (context, state) {
+              final token = state.maybeWhen(
+                authenticated: (token) => token,
+                orElse: () => '<none>',
+              );
+              return SelectableText(
+                'Current token: $token',
+              );
+            },
           ),
         ],
       ),

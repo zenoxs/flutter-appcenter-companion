@@ -16,7 +16,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
         _http = http,
         super(const AuthenticationState.unknown()) {
     _authenticationTokenSubscription =
-        _tokenRepository.token.listen((token) => _onAuthenticationTokenChanged);
+        _tokenRepository.token.listen(_onAuthenticationTokenChanged);
   }
 
   final TokenRepository _tokenRepository;
@@ -27,12 +27,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     String? token,
   ) async {
     if (token != null) {
-      final isValid = await _http.checkTokenValidity(token);
-      return emit(
-        isValid
-            ? AuthenticationState.authenticated(token: token)
-            : const AuthenticationState.unauthenticated(),
-      );
+      emit(AuthenticationState.authenticated(token: token));
     } else {
       emit(const AuthenticationState.unauthenticated());
     }
@@ -41,7 +36,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> login(String token) async {
     _tokenRepository.clearToken();
     final isValid = await _http.checkTokenValidity(token);
-    print(isValid);
     if (isValid) {
       _tokenRepository.setToken(token);
     }

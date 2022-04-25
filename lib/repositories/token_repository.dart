@@ -9,7 +9,8 @@ class TokenRepository {
   TokenRepository({FlutterSecureStorage? storage})
       : _storage = storage ?? const FlutterSecureStorage() {
     _restoreToken().then(
-      (value) => _tokenSubscription = token.listen((t) => _persistToken(t)),
+      (value) =>
+          _tokenSubscription = token.skip(1).listen((t) => _persistToken(t)),
     );
   }
 
