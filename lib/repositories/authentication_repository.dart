@@ -1,8 +1,15 @@
 import 'dart:async';
 
+import 'package:appcenter_companion/repositories/appcenter_http.dart';
+import 'package:dio/dio.dart';
+
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
+  final AppcenterHttp _http;
+
+  AuthenticationRepository(AppcenterHttp http) : _http = http;
+
   final _controller = StreamController<AuthenticationStatus>();
 
   Stream<AuthenticationStatus> get status async* {
@@ -14,10 +21,15 @@ class AuthenticationRepository {
   Future<void> logIn({
     required String token,
   }) async {
-    await Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _controller.add(AuthenticationStatus.authenticated),
+    _http.get(
+      'user/metadata/optimizely',
+      options: Options(
+        headers: {
+          'X-API-Token': token,
+        },
+      ),
     );
+    _controller.add(AuthenticationStatus.authenticated);
   }
 
   void logOut() {
