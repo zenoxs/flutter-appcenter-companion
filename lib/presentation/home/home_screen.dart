@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
           if (kIsWeb) return const Text(_appTitle);
           return const DragToMoveArea(
             child: Align(
-              alignment: AlignmentDirectional.centerStart,
+              alignment: AlignmentDirectional.center,
               child: Text(_appTitle),
             ),
           );

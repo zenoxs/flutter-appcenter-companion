@@ -2,6 +2,14 @@
 
 A new Flutter project.
 
+## Build generated source
+
+```shell
+flutter pub run build_runner build
+# or with the watch 
+flutter pub run build_runner watch
+```
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
