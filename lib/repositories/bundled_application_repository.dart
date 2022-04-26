@@ -13,7 +13,7 @@ class BundledApplicationRepository {
   late final Box<BundledApplication> _box;
 
   Stream<Query<BundledApplication>> get bundledApplications {
-    return _box.query().watch();
+    return _box.query().watch(triggerImmediately: true);
   }
 
   Future<void> addBundledApplication(

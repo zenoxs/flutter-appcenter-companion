@@ -16,6 +16,10 @@ class ApplicationRepository {
         fetchAllApps();
       }
     });
+    _box.query().watch().listen((event) {
+      final apps = event.find();
+      print('ApplicationRepository: ${apps.length}');
+    });
   }
 
   final AppcenterHttp _http;
@@ -23,7 +27,7 @@ class ApplicationRepository {
   late final Box<Application> _box;
 
   Stream<Query<Application>> get applications {
-    return _box.query().watch();
+    return _box.query().watch(triggerImmediately: true);
   }
 
   Future<void> fetchAllApps() async {
