@@ -1,3 +1,4 @@
+import 'package:appcenter_companion/bloc/appcenter_ws/appcenter_ws_cubit.dart';
 import 'package:appcenter_companion/bloc/authentication/authentication_cubit.dart';
 import 'package:appcenter_companion/environment.dart';
 import 'package:appcenter_companion/interceptors/authentication_interceptor.dart';
@@ -37,7 +38,6 @@ Future<void> main() async {
     windowManager.waitUntilReadyToShow().then((_) async {
       await windowManager.setTitleBarStyle(
         TitleBarStyle.hidden,
-        windowButtonVisibility: false,
       );
       await windowManager.setMinimumSize(const Size(755, 545));
       await windowManager.show();

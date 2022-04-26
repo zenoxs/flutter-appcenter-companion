@@ -53,14 +53,6 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
             ),
           );
         }(),
-        actions: kIsWeb
-            ? null
-            : DragToMoveArea(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [Spacer(), WindowButtons()],
-                ),
-              ),
       ),
       pane: NavigationPane(
         selected: index,

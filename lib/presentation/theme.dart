@@ -62,6 +62,7 @@ class AppTheme extends ChangeNotifier {
           : Colors.transparent,
       dark: FluentTheme.of(context).brightness.isDark,
     );
+    _windowEffect = effect;
   }
 
   TextDirection _textDirection = TextDirection.ltr;
