@@ -7,7 +7,8 @@ class TokenRepository {
   final FlutterSecureStorage _storage;
 
   TokenRepository({FlutterSecureStorage? storage})
-      : _storage = storage ?? const FlutterSecureStorage() {
+      : _storage =
+            storage ?? const FlutterSecureStorage(mOptions: MacOsOptions()) {
     _restoreToken().then(
       (value) =>
           _tokenSubscription = token.skip(1).listen((t) => _persistToken(t)),
@@ -37,7 +38,9 @@ class TokenRepository {
     String? tokenValue;
     try {
       tokenValue = await _storage.read(key: 'token');
-    } catch (_) {}
+    } catch (error) {
+      print(error);
+    }
     if (tokenValue != null) {
       _tokenController.add(tokenValue);
     } else {

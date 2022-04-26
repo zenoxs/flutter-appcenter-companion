@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:appcenter_companion/presentation/app_list/app_list_screen.dart';
 import 'package:appcenter_companion/presentation/home/authentication_dialog.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -42,17 +45,9 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
       key: viewKey,
-      appBar: NavigationAppBar(
+      appBar: const NavigationAppBar(
         automaticallyImplyLeading: false,
-        title: () {
-          if (kIsWeb) return const Text(_appTitle);
-          return const DragToMoveArea(
-            child: Align(
-              alignment: AlignmentDirectional.center,
-              child: Text(_appTitle),
-            ),
-          );
-        }(),
+        height: 30,
       ),
       pane: NavigationPane(
         selected: index,
@@ -64,11 +59,15 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         header: Container(
           height: kOneLineTileHeight,
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: FlutterLogo(
-            style: appTheme.displayMode == PaneDisplayMode.top
-                ? FlutterLogoStyle.markOnly
-                : FlutterLogoStyle.horizontal,
-            size: appTheme.displayMode == PaneDisplayMode.top ? 24 : 100.0,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Appcenter Companion',
+              style: FluentTheme.of(context).typography.title!.copyWith(
+                    fontSize:
+                        appTheme.displayMode == PaneDisplayMode.top ? 20 : 22.0,
+                  ),
+            ),
           ),
         ),
         displayMode: appTheme.displayMode,
@@ -85,38 +84,14 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
           // It doesn't look good when resizing from compact to open
           // PaneItemHeader(header: Text('User Interaction')),
           PaneItem(
-            icon: const Icon(FluentIcons.checkbox_composite),
-            title: const Text('Inputs'),
+            icon: const Icon(FluentIcons.all_apps),
+            title: const Text('Apps'),
           ),
           PaneItem(
-            icon: const Icon(FluentIcons.text_field),
-            title: const Text('Forms'),
+            icon: const Icon(FluentIcons.build),
+            title: const Text('Builds'),
           ),
           PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.color),
-            title: const Text('Colors'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.icon_sets_flag),
-            title: const Text('Icons'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.plain_text),
-            title: const Text('Typography'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.cell_phone),
-            title: const Text('Mobile'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.toolbox),
-            title: const Text('Command bars'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.pop_expand),
-            title: const Text('Flyouts'),
-          ),
           PaneItem(
             icon: Icon(
               appTheme.displayMode == PaneDisplayMode.top
@@ -149,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
       content: NavigationBody(
         index: index,
         children: [
-          Container(),
+          AppListScreen(),
           Container(),
           Container(),
           Container(),
@@ -192,25 +167,24 @@ class _LinkPaneItemAction extends PaneItem {
     focusNode,
     autofocus = false,
   }) : super(
-          icon: icon,
-          title: title,
-          infoBadge: infoBadge,
-          focusNode: focusNode,
-          autofocus: autofocus,
-        );
+    icon: icon,
+    title: title,
+    infoBadge: infoBadge,
+    focusNode: focusNode,
+    autofocus: autofocus,
+  );
 
   final String? link;
   final VoidCallback? action;
 
   @override
-  Widget build(
-    BuildContext context,
-    bool selected,
-    VoidCallback? onPressed, {
-    PaneDisplayMode? displayMode,
-    bool showTextOnTop = true,
-    bool? autofocus,
-  }) {
+  Widget build(BuildContext context,
+      bool selected,
+      VoidCallback? onPressed, {
+        PaneDisplayMode? displayMode,
+        bool showTextOnTop = true,
+        bool? autofocus,
+      }) {
     if (link != null) {
       return Link(
         uri: Uri.parse(link!),

@@ -48,7 +48,9 @@ class _AppState extends State<App> {
           ),
           builder: (context, child) {
             appTheme.setEffect(
-                flutter_acrylic.WindowEffect.transparent, context);
+              flutter_acrylic.WindowEffect.transparent,
+              context,
+            );
             return Directionality(
               textDirection: appTheme.textDirection,
               child: NavigationPaneTheme(

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'app_dto.freezed.dart';
-
 part 'app_dto.g.dart';
 
 List<AppDto> appDtoFromJson(List<dynamic> data) =>
@@ -27,7 +26,7 @@ class AppDto with _$AppDto {
     DateTime createdAt,
     DateTime updatedAt,
     String releaseType,
-    Owner owner,
+    OwnerDto owner,
     @JsonKey(nullable: true) AzureSubscription? azureSubscription,
     List<MemberPermission> memberPermissions,
   ) = _AppDto;
@@ -56,17 +55,18 @@ enum Os {
 }
 
 @freezed
-class Owner with _$Owner {
-  const factory Owner(
+class OwnerDto with _$OwnerDto {
+  const factory OwnerDto(
     String id,
     String avatarUrl,
     String displayName,
     dynamic email,
     String name,
     Type type,
-  ) = _Owner;
+  ) = _OwnerDto;
 
-  factory Owner.fromJson(Map<String, dynamic> json) => _$OwnerFromJson(json);
+  factory OwnerDto.fromJson(Map<String, dynamic> json) =>
+      _$OwnerDtoFromJson(json);
 }
 
 enum Type { org }

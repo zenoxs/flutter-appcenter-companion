@@ -13,6 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'objectbox.g.dart';
+
 /// Checks if the current environment is a desktop environment.
 bool get isDesktop {
   if (kIsWeb) return false;
@@ -47,21 +49,23 @@ Future<void> main() async {
     });
   }
 
+  final store = await openStore(macosApplicationGroup: 'ac-companion');
   final Environment environment = Environment.fromEnvironment();
   final AppcenterHttp appcenterHttp = AppcenterHttp(environment);
   final TokenRepository tokenRepository = TokenRepository();
-  final ApplicationRepository applicationRepository =
-      ApplicationRepository(appcenterHttp);
-
-  // set up interceptors
-  final AuthenticationInterceptor authenticationInterceptor =
-      AuthenticationInterceptor(tokenRepository);
-  appcenterHttp.interceptors.add(authenticationInterceptor);
 
   final AuthenticationCubit authenticationCubit = AuthenticationCubit(
     appcenterHttp,
     tokenRepository,
   );
+  // set up interceptors
+  final AuthenticationInterceptor authenticationInterceptor =
+      AuthenticationInterceptor(tokenRepository);
+  appcenterHttp.interceptors.add(authenticationInterceptor);
+
+  final ApplicationRepository applicationRepository =
+      ApplicationRepository(appcenterHttp, store, authenticationCubit);
+
   final AppcenterWsCubit appcenterWsCubit = AppcenterWsCubit(
     appcenterHttp,
     applicationRepository,
