@@ -4,74 +4,80 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:3973049236268745233",
-      "lastPropertyId": "4:5200541342171574879",
+      "id": "1:6952348076127927831",
+      "lastPropertyId": "4:7503305214345549243",
       "name": "Application",
       "properties": [
         {
-          "id": "1:2160721147051723847",
+          "id": "1:8606353472020227808",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:7964104843126549180",
+          "id": "2:4328851163765222379",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:8226588593161324987",
+          "id": "3:2418371269408524668",
           "name": "remoteId",
           "type": 9
         },
         {
-          "id": "4:5200541342171574879",
+          "id": "4:7503305214345549243",
           "name": "ownerId",
           "type": 11,
           "flags": 520,
-          "indexId": "1:6754072869072482552",
+          "indexId": "1:6596460256617380807",
           "relationTarget": "Owner"
         }
       ],
       "relations": []
     },
     {
-      "id": "2:3983823447428680103",
-      "lastPropertyId": "2:1084218999073995315",
-      "name": "BundleApplication",
+      "id": "2:5194904846177136040",
+      "lastPropertyId": "2:9176640136452781872",
+      "name": "BundledApplication",
       "properties": [
         {
-          "id": "1:6093381815086767651",
+          "id": "1:3125874828090277319",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:1084218999073995315",
+          "id": "2:9176640136452781872",
           "name": "name",
           "type": 9
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "1:3461071677322813957",
+          "name": "applications",
+          "targetId": "1:6952348076127927831"
+        }
+      ]
     },
     {
-      "id": "3:1127152605964079603",
-      "lastPropertyId": "3:750695005875896614",
+      "id": "3:1607075984716929851",
+      "lastPropertyId": "3:7226250738711174189",
       "name": "Owner",
       "properties": [
         {
-          "id": "1:4183795443841245001",
+          "id": "1:885571394557772942",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:4406096498783832295",
+          "id": "2:5909541658990819196",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:750695005875896614",
+          "id": "3:7226250738711174189",
           "name": "remoteId",
           "type": 9
         }
@@ -79,9 +85,9 @@
       "relations": []
     }
   ],
-  "lastEntityId": "3:1127152605964079603",
-  "lastIndexId": "1:6754072869072482552",
-  "lastRelationId": "0:0",
+  "lastEntityId": "3:1607075984716929851",
+  "lastIndexId": "1:6596460256617380807",
+  "lastRelationId": "1:3461071677322813957",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

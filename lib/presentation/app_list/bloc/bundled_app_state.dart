@@ -1,6 +1,8 @@
 part of 'bundled_app_cubit.dart';
 
-@immutable
-abstract class BundledAppState {}
-
-class BundledAppInitial extends BundledAppState {}
+@freezed
+class BundledAppState with _$BundledAppState {
+  factory BundledAppState({
+    @Default([]) List<BundledApplication> bundledApplications,
+  }) = _BundledAppState;
+}

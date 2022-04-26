@@ -35,6 +35,7 @@ class _AppState extends State<App> {
             brightness: Brightness.dark,
             accentColor: appTheme.color,
             visualDensity: VisualDensity.standard,
+            scaffoldBackgroundColor: Colors.grey[190],
             focusTheme: FocusThemeData(
               glowFactor: is10footScreen() ? 2.0 : 0.0,
             ),

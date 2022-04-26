@@ -5,6 +5,7 @@ import 'package:appcenter_companion/interceptors/authentication_interceptor.dart
 import 'package:appcenter_companion/presentation/app.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 import 'package:appcenter_companion/repositories/application_repository.dart';
+import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:appcenter_companion/repositories/token_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,11 @@ Future<void> main() async {
   }
 
   final store = await openStore(macosApplicationGroup: 'ac-companion');
+  if (Admin.isAvailable()) {
+    // Keep a reference until no longer needed or manually closed.
+    Admin(store);
+  }
+
   final Environment environment = Environment.fromEnvironment();
   final AppcenterHttp appcenterHttp = AppcenterHttp(environment);
   final TokenRepository tokenRepository = TokenRepository();
@@ -65,6 +71,8 @@ Future<void> main() async {
 
   final ApplicationRepository applicationRepository =
       ApplicationRepository(appcenterHttp, store, authenticationCubit);
+  final BundledApplicationRepository bundledApplicationRepository =
+      BundledApplicationRepository(store);
 
   final AppcenterWsCubit appcenterWsCubit = AppcenterWsCubit(
     appcenterHttp,
@@ -79,6 +87,7 @@ Future<void> main() async {
         RepositoryProvider.value(value: tokenRepository),
         RepositoryProvider.value(value: appcenterHttp),
         RepositoryProvider.value(value: applicationRepository),
+        RepositoryProvider.value(value: bundledApplicationRepository),
       ],
       child: MultiBlocProvider(
         providers: [
