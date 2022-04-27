@@ -5,24 +5,13 @@ import 'package:provider/provider.dart';
 
 import 'theme.dart';
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  final AppTheme appTheme = AppTheme();
-
-  @override
-  void initState() {
-    // appTheme.setEffect(flutter_acrylic.WindowEffect.acrylic, context);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AppTheme appTheme = AppTheme();
+
     return ChangeNotifierProvider.value(
       value: appTheme,
       builder: (context, _) {
@@ -57,7 +46,7 @@ class _AppState extends State<App> {
               child: NavigationPaneTheme(
                 data: NavigationPaneThemeData(
                   backgroundColor: appTheme.windowEffect !=
-                          flutter_acrylic.WindowEffect.disabled
+                      flutter_acrylic.WindowEffect.disabled
                       ? Colors.transparent
                       : null,
                 ),

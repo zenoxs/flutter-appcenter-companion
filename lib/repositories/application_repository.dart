@@ -2,7 +2,7 @@ import 'package:appcenter_companion/bloc/authentication/authentication_cubit.dar
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 
-import 'dto/app_dto.dart';
+import 'dto/dto.dart';
 import 'entities/application.dart';
 
 class ApplicationRepository {
