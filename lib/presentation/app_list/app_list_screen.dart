@@ -1,5 +1,5 @@
 import 'package:appcenter_companion/presentation/app_detail/app_detail_screen.dart';
-import 'package:appcenter_companion/presentation/app_list/add_bundled_app_dialog.dart';
+import 'package:appcenter_companion/presentation/app_list/add_bundled_app/add_bundled_app_dialog.dart';
 import 'package:appcenter_companion/presentation/widgets/fluent_card.dart';
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:fluent_ui/fluent_ui.dart';

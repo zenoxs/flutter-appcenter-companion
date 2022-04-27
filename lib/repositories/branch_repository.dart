@@ -21,15 +21,19 @@ class BranchRepository {
     return _box.query().watch(triggerImmediately: true);
   }
 
-  Future<void> fetchBranchByApplication(Application application) async {
-    final appBranches = await _http
+  Future<List<Branch>> fetchBranchByApplication(Application application) async {
+    final dtoAppBranches = await _http
         .get('${application.owner.target!.name}/${application.name}/branches')
         .then((value) => branchDtoFromJson(value.data));
 
+    final List<Branch> appBranches = [];
     _store.runInTransaction(TxMode.write, () {
-      for (final branch in appBranches) {
-        Branch.createFromDto(branch, _store);
+      for (final dtoBranch in dtoAppBranches) {
+        final branch = Branch.createFromDto(dtoBranch, application, _store);
+        appBranches.add(branch);
       }
     });
+
+    return appBranches;
   }
 }

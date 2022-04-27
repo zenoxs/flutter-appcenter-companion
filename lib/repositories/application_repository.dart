@@ -26,14 +26,18 @@ class ApplicationRepository {
     return _box.query().watch(triggerImmediately: true);
   }
 
-  Future<void> fetchAllApps() async {
-    final apps =
+  Future<List<Application>> fetchAllApps() async {
+    final dtoApps =
         await _http.get('apps').then((value) => appDtoFromJson(value.data));
 
+    final List<Application> apps = [];
     _store.runInTransaction(TxMode.write, () {
-      for (final app in apps) {
-        Application.createFromDto(app, _store);
+      for (final dtoApp in dtoApps) {
+        final app = Application.createFromDto(dtoApp, _store);
+        apps.add(app);
       }
     });
+
+    return apps;
   }
 }

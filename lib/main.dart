@@ -65,6 +65,8 @@ Future<void> main() async {
       ApplicationRepository(appcenterHttp, store, authenticationCubit);
   final BundledApplicationRepository bundledApplicationRepository =
       BundledApplicationRepository(store);
+  final BranchRepository branchRepository =
+      BranchRepository(appcenterHttp, store);
 
   final AppcenterWsCubit appcenterWsCubit = AppcenterWsCubit(
     appcenterHttp,
@@ -79,6 +81,7 @@ Future<void> main() async {
         RepositoryProvider.value(value: tokenRepository),
         RepositoryProvider.value(value: appcenterHttp),
         RepositoryProvider.value(value: applicationRepository),
+        RepositoryProvider.value(value: branchRepository),
         RepositoryProvider.value(value: bundledApplicationRepository),
       ],
       child: MultiBlocProvider(
