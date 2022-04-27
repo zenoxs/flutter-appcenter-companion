@@ -83,17 +83,119 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:6858235358735394511",
+      "lastPropertyId": "5:260920688567799928",
+      "name": "Branch",
+      "properties": [
+        {
+          "id": "1:4471885417659285597",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3112690520338209029",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:9091318234769089309",
+          "name": "remoteId",
+          "type": 9
+        },
+        {
+          "id": "5:260920688567799928",
+          "name": "lastBuildId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:71951896938070509",
+          "relationTarget": "Build"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:5134526807934369821",
+      "lastPropertyId": "13:2989168303833139027",
+      "name": "Build",
+      "properties": [
+        {
+          "id": "1:3421280129344047551",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "5:8208143309603642506",
+          "name": "buildNumber",
+          "type": 9
+        },
+        {
+          "id": "6:2623012935941599357",
+          "name": "sourceBranchId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:4660640855969646705",
+          "relationTarget": "Branch"
+        },
+        {
+          "id": "7:7660162360190954431",
+          "name": "queueTime",
+          "type": 10
+        },
+        {
+          "id": "8:8758841894948919900",
+          "name": "startTime",
+          "type": 10
+        },
+        {
+          "id": "9:1000436888968287035",
+          "name": "finishTime",
+          "type": 10
+        },
+        {
+          "id": "10:9207422518270155579",
+          "name": "lastChangedDate",
+          "type": 10
+        },
+        {
+          "id": "11:5463099877600262706",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "12:6998225867928450549",
+          "name": "result",
+          "type": 9
+        },
+        {
+          "id": "13:2989168303833139027",
+          "name": "sourceVersion",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:1607075984716929851",
-  "lastIndexId": "1:6596460256617380807",
+  "lastEntityId": "5:5134526807934369821",
+  "lastIndexId": "5:71951896938070509",
   "lastRelationId": "1:3461071677322813957",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    8901508737980051324,
+    5876135719220196589
+  ],
+  "retiredPropertyUids": [
+    6893674052952939522,
+    7245229792008905537,
+    5538867231579687099,
+    6624324710526241093
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

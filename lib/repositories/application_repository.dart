@@ -16,10 +16,6 @@ class ApplicationRepository {
         fetchAllApps();
       }
     });
-    _box.query().watch().listen((event) {
-      final apps = event.find();
-      print('ApplicationRepository: ${apps.length}');
-    });
   }
 
   final AppcenterHttp _http;
