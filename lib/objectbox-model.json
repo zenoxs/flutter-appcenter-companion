@@ -52,13 +52,7 @@
           "type": 9
         }
       ],
-      "relations": [
-        {
-          "id": "1:3461071677322813957",
-          "name": "applications",
-          "targetId": "1:6952348076127927831"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "3:1607075984716929851",
@@ -86,7 +80,7 @@
     },
     {
       "id": "4:6858235358735394511",
-      "lastPropertyId": "6:3604014203993610507",
+      "lastPropertyId": "7:7268137876275805664",
       "name": "Branch",
       "properties": [
         {
@@ -115,6 +109,11 @@
           "flags": 520,
           "indexId": "6:1741763973552374671",
           "relationTarget": "Application"
+        },
+        {
+          "id": "7:7268137876275805664",
+          "name": "configured",
+          "type": 1
         }
       ],
       "relations": []
@@ -180,10 +179,40 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:5058075974310476728",
+      "lastPropertyId": "4:6209210991435475742",
+      "name": "LinkedApplication",
+      "properties": [
+        {
+          "id": "1:5306910208921463484",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "3:5710496510220635414",
+          "name": "branchId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:3345393863484330485",
+          "relationTarget": "Branch"
+        },
+        {
+          "id": "4:6209210991435475742",
+          "name": "bundledApplicationId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:7538323303535380606",
+          "relationTarget": "BundledApplication"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:5134526807934369821",
-  "lastIndexId": "6:1741763973552374671",
+  "lastEntityId": "6:5058075974310476728",
+  "lastIndexId": "8:7538323303535380606",
   "lastRelationId": "1:3461071677322813957",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -198,8 +227,11 @@
     7245229792008905537,
     5538867231579687099,
     6624324710526241093,
-    9091318234769089309
+    9091318234769089309,
+    6880246115545605382
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    3461071677322813957
+  ],
   "version": 1
 }

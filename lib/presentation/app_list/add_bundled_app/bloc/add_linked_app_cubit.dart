@@ -5,13 +5,13 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'add_linked_app_cubit.freezed.dart';
-
 part 'add_linked_app_state.dart';
 
 class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
-  AddLinkedAppCubit(ApplicationRepository applicationRepository,
-      BranchRepository branchRepository,)
-      : _applicationRepository = applicationRepository,
+  AddLinkedAppCubit(
+    ApplicationRepository applicationRepository,
+    BranchRepository branchRepository,
+  )   : _applicationRepository = applicationRepository,
         _branchRepository = branchRepository,
         super(AddLinkedAppState()) {
     applicationRepository.applications.listen((event) {
@@ -28,8 +28,16 @@ class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
         selectedApplication: application,
         selectedBranch: null,
         branches: [],
+        loadingBranches: true,
       ),
     );
+    _branchRepository.fetchBranchByApplication(application).then((branches) {
+      final configuredBranches =
+          branches.where((branch) => branch.configured).toList();
+      emit(
+        state.copyWith(branches: configuredBranches),
+      );
+    }).whenComplete(() => emit(state.copyWith(loadingBranches: false)));
   }
 
   Future<void> selectBranch(Branch branch) async {

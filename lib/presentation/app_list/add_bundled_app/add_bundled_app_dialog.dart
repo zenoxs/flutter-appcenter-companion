@@ -1,7 +1,6 @@
 import 'package:appcenter_companion/presentation/app_list/add_bundled_app/add_linked_app_dialog.dart';
 import 'package:appcenter_companion/repositories/application_repository.dart';
 import 'package:appcenter_companion/repositories/branch_repository.dart';
-import 'package:appcenter_companion/repositories/entities/application.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,15 +16,15 @@ class AddBundledAppDialog extends StatefulWidget {
 
 class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
   final TextEditingController _nameController = TextEditingController();
-  List<Application> _linkedApps = [];
+  late final AddBundledAppCubit _addBundledAppCubit = AddBundledAppCubit(
+    context.read<ApplicationRepository>(),
+    context.read<BranchRepository>(),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AddBundledAppCubit(
-        context.read<ApplicationRepository>(),
-        context.read<BranchRepository>(),
-      ),
+    return BlocProvider.value(
+      value: _addBundledAppCubit,
       child: ContentDialog(
         title: const Text('Add bundled app'),
         constraints: const BoxConstraints(maxWidth: 500),
@@ -45,42 +44,36 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
             ),
             const SizedBox(height: 16),
             InfoLabel(
-              label: 'linked applications',
+              label: 'Linked applications',
               child: Container(
                 constraints: const BoxConstraints(
-                  minHeight: 200,
-                  maxHeight: 300,
+                  minHeight: 100,
+                  maxHeight: 200,
                 ),
-                child: StreamBuilder(
-                  stream: context
-                      .read<ApplicationRepository>()
-                      .applications
-                      .map((event) => event.find()),
-                  builder:
-                      (context, AsyncSnapshot<List<Application>> snapshot) {
-                    if (!snapshot.hasData) {
+                child: BlocBuilder<AddBundledAppCubit, AddBundledAppState>(
+                  builder: (context, state) {
+                    if (state.linkedBranches.isEmpty) {
                       return Text(
-                        'You need at least one application to add a bundled app.',
-                        style: FluentTheme.of(context).typography.caption,
+                        'You need at least one linked application to add a bundled app.',
+                        style: FluentTheme
+                            .of(context)
+                            .typography
+                            .caption,
                       );
                     }
                     return TreeView(
                       items: [
-                        // TODO: Display by organization tree + create bloc for application list ?
-                        ...snapshot.data!.map(
-                              (app) => TreeViewItem(
-                            key: Key(app.id.toString()),
-                            content: Text(app.name),
-                            value: app,
-                          ),
+                        ...state.linkedBranches.map(
+                              (branch) =>
+                              TreeViewItem(
+                                key: Key(branch.id.toString()),
+                                content: Text(
+                                    '${branch.application.target!.name}/${branch
+                                        .name}'),
+                                value: branch,
+                              ),
                         )
                       ],
-                      onSelectionChanged: (item) async {
-                        _linkedApps =
-                            item.map((e) => e.value as Application).toList();
-                      },
-                      // (optional). Can be TreeViewSelectionMode.single or TreeViewSelectionMode.multiple
-                      selectionMode: TreeViewSelectionMode.multiple,
                     );
                   },
                 ),
@@ -88,13 +81,18 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
             ),
             const SizedBox(height: 16),
             TextButton(
-                child: const Text('Add linked application'),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => const AddLinkedAppDialog(),
-                  );
-                })
+              child: const Text('Add linked application'),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) =>
+                      BlocProvider.value(
+                        value: _addBundledAppCubit,
+                        child: const AddLinkedAppDialog(),
+                      ),
+                );
+              },
+            )
           ],
         ),
         actions: [
@@ -102,8 +100,8 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
             child: const Text('Add'),
             onPressed: () {
               context.read<BundledAppCubit>().addBundledApp(
-                    _nameController.text,
-                    _linkedApps,
+                _nameController.text,
+                _addBundledAppCubit.state.linkedBranches,
                   );
               Navigator.pop(context);
             },

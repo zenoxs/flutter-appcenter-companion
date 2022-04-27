@@ -6,7 +6,6 @@ import 'build_dto.dart';
 import 'commit_dto.dart';
 
 part 'branch_dto.freezed.dart';
-
 part 'branch_dto.g.dart';
 
 List<BranchDto> branchDtoFromJson(List<dynamic> data) =>
@@ -20,8 +19,8 @@ abstract class BranchDto with _$BranchDto {
   const factory BranchDto(
     BranchValueDto branch,
     bool configured,
-    BuildDto lastBuild,
-    String trigger,
+    @JsonKey(nullable: true) BuildDto? lastBuild,
+    @JsonKey(nullable: true) String? trigger,
   ) = _BranchDto;
 
   factory BranchDto.fromJson(Map<String, dynamic> json) =>

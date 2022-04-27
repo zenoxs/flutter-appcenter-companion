@@ -1,6 +1,7 @@
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
-import 'package:appcenter_companion/repositories/entities/application.dart';
+import 'package:appcenter_companion/repositories/entities/branch.dart';
 import 'package:appcenter_companion/repositories/entities/bundled_application.dart';
+import 'package:appcenter_companion/repositories/entities/entities.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,9 +19,13 @@ class BundledAppCubit extends Cubit<BundledAppState> {
 
   final BundledApplicationRepository _bundledApplicationRepository;
 
-  void addBundledApp(String name, List<Application> linkedApps) {
+  void addBundledApp(String name, List<Branch> linkedBranches) {
     final bundledApplication = BundledApplication(name: name);
-    bundledApplication.applications.addAll(linkedApps);
+    for (final branch in linkedBranches) {
+      final linkedApplication = LinkedApplication();
+      linkedApplication.branch.target = branch;
+      bundledApplication.linkedApplications.add(linkedApplication);
+    }
     _bundledApplicationRepository.addBundledApplication(bundledApplication);
   }
 }

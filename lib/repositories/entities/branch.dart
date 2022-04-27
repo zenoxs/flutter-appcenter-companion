@@ -11,6 +11,8 @@ class Branch {
   int id;
   final String name;
 
+  final bool configured;
+
   @Backlink('sourceBranch')
   final builds = ToMany<Build>();
 
@@ -18,15 +20,22 @@ class Branch {
 
   final application = ToOne<Application>();
 
-  Branch({this.id = 0, required this.name}) : super();
+  Branch({
+    this.id = 0,
+    required this.name,
+    required this.configured,
+  }) : super();
 
   static Branch createFromDto(
       BranchDto branchDto, Application application, Store store) {
     final box = store.box<Branch>();
     final branch = Branch(
       name: branchDto.branch.name,
+      configured: branchDto.configured,
     );
-    branch.lastBuild.target = Build.createFromDto(branchDto.lastBuild, store);
+    branch.lastBuild.target = branchDto.lastBuild != null
+        ? Build.createFromDto(branchDto.lastBuild!, store)
+        : null;
     branch.application.target = application;
 
     final QueryBuilder<Branch> builder =

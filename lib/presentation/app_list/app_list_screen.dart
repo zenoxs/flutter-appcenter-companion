@@ -70,10 +70,11 @@ class AppListScreen extends StatelessWidget {
                       Wrap(
                         runSpacing: 10,
                         spacing: 10,
-                        children: bundledApp.applications
+                        children: bundledApp.linkedApplications
                             .map(
                               (linkedApp) => Text(
-                                linkedApp.name,
+                                linkedApp
+                                    .branch.target!.application.target!.name,
                                 style: FluentTheme.of(context)
                                     .typography
                                     .body!

@@ -1,15 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'commit_dto.freezed.dart';
-
 part 'commit_dto.g.dart';
 
 @freezed
 abstract class BranchCommitDto with _$BranchCommitDto {
   const factory BranchCommitDto(
     String sha,
-    CommitDto commit,
-    AuthorAvatarDto author,
+    @JsonKey(nullable: true) CommitDto? commit,
+    @JsonKey(nullable: true) AuthorAvatarDto? author,
   ) = _BranchCommitDto;
 
   factory BranchCommitDto.fromJson(Map<String, dynamic> json) =>
