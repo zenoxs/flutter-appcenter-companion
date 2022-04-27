@@ -16,12 +16,11 @@ String branchDtoToJson(List<BranchDto> data) =>
 
 @freezed
 abstract class BranchDto with _$BranchDto {
-  const factory BranchDto(
-    BranchValueDto branch,
-    bool configured,
-    @JsonKey(nullable: true) BuildDto? lastBuild,
-    @JsonKey(nullable: true) String? trigger,
-  ) = _BranchDto;
+  @JsonSerializable(fieldRename: FieldRename.none)
+  const factory BranchDto(BranchValueDto branch,
+      bool configured,
+      @JsonKey(nullable: true) BuildDto? lastBuild,
+      @JsonKey(nullable: true) String? trigger,) = _BranchDto;
 
   factory BranchDto.fromJson(Map<String, dynamic> json) =>
       _$BranchDtoFromJson(json);

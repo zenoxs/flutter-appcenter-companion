@@ -72,17 +72,27 @@ class AppListScreen extends StatelessWidget {
                         spacing: 10,
                         children: bundledApp.linkedApplications
                             .map(
-                              (linkedApp) => Text(
-                                linkedApp
-                                    .branch.target!.application.target!.name,
-                                style: FluentTheme.of(context)
-                                    .typography
-                                    .body!
-                                    .copyWith(
-                                      color: FluentTheme.of(context)
-                                          .accentColor
-                                          .normal,
-                                    ),
+                              (linkedApp) => Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    linkedApp.branch.target!.application.target!
+                                        .name,
+                                    style: FluentTheme.of(context)
+                                        .typography
+                                        .body!
+                                        .copyWith(
+                                          color: FluentTheme.of(context)
+                                              .accentColor
+                                              .normal,
+                                        ),
+                                  ),
+                                  if (linkedApp.branch.target?.lastBuild.target
+                                          ?.status !=
+                                      null)
+                                    Text(linkedApp.branch.target!.lastBuild
+                                        .target!.status)
+                                ],
                               ),
                             )
                             .toList(),

@@ -24,7 +24,8 @@ class BranchRepository {
   Future<List<Branch>> fetchBranchByApplication(Application application) async {
     final dtoAppBranches = await _http
         .get(
-            'apps/${application.owner.target!.name}/${application.name}/branches')
+          'apps/${application.owner.target!.name}/${application.name}/branches',
+        )
         .then((value) => branchDtoFromJson(value.data));
 
     final List<Branch> appBranches = [];

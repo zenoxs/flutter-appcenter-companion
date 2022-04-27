@@ -13,7 +13,8 @@ class BundledAppCubit extends Cubit<BundledAppState> {
       : _bundledApplicationRepository = bundledApplicationRepository,
         super(BundledAppState()) {
     bundledApplicationRepository.bundledApplications.listen((event) {
-      emit(state.copyWith(bundledApplications: event.find()));
+      final apps = event.find();
+      emit(state.copyWith(bundledApplications: apps));
     });
   }
 
