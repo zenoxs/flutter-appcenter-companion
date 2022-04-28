@@ -51,7 +51,14 @@ enum MemberPermission { manager, developer }
 enum Os {
   iOS,
   @JsonValue('Android')
-  android
+  android,
+  @JsonValue('Windows')
+  windows,
+  macOS,
+  tvOS,
+  @JsonValue('Custom')
+  custom,
+  unknown,
 }
 
 @freezed
@@ -62,18 +69,31 @@ class OwnerDto with _$OwnerDto {
     String displayName,
     dynamic email,
     String name,
-    Type type,
+    OwnerType type,
   ) = _OwnerDto;
 
   factory OwnerDto.fromJson(Map<String, dynamic> json) =>
       _$OwnerDtoFromJson(json);
 }
 
-enum Type { org }
+enum OwnerType { org, user }
 
 enum Platform {
   @JsonValue('React-Native')
   reactNative,
   @JsonValue('Objective-C-Swift')
   objectiveCSwift,
+  @JsonValue('Java')
+  java,
+  @JsonValue('Xamarin')
+  xamarin,
+  @JsonValue('Unity')
+  unity,
+  @JsonValue('UWP')
+  uwp,
+  @JsonValue('WPF')
+  wpf,
+  @JsonValue('WinForms')
+  winForms,
+  unknown,
 }

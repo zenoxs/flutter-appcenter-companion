@@ -30,10 +30,16 @@ class AppItem extends StatelessWidget {
             )
             .toList(),
       ),
-      header: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      header: Wrap(
+        spacing: 10,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
+          CircleAvatar(
+            radius: 18,
+            foregroundImage: bundledApplication.iconUrl != null
+                ? NetworkImage(bundledApplication.iconUrl!)
+                : null,
+          ),
           Text(
             bundledApplication.name,
             style: FluentTheme.of(context).typography.subtitle,
@@ -53,7 +59,7 @@ class AppItem extends StatelessWidget {
               title: Wrap(
                 children: [
                   Text(
-                    branch?.application.target?.name ?? '-',
+                    branch?.application.target?.displayName ?? '-',
                   ),
                 ],
               ),

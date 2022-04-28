@@ -10,5 +10,17 @@ class BundledApplication {
   @Backlink('bundledApplication')
   final linkedApplications = ToMany<LinkedApplication>();
 
+  String? get iconUrl {
+    String? url;
+    for (final linkedApp in linkedApplications) {
+      final appIcon = linkedApp.branch.target?.application.target?.iconUrl;
+      if (appIcon != null) {
+        url = appIcon;
+        break;
+      }
+    }
+    return url;
+  }
+
   BundledApplication({this.id = 0, required this.name});
 }

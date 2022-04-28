@@ -10,18 +10,63 @@ class Application extends RemoteObject {
   @Id()
   int id;
   final String name;
+  final String displayName;
+  final String? description;
+  final String? iconUrl;
   @override
   final String remoteId;
 
   final owner = ToOne<Owner>();
 
-  Application({this.id = 0, required this.name, required this.remoteId})
-      : super();
+  Os os;
 
-  Application copyWith({int? id, String? name, String? remoteId}) {
+  int get dbOs {
+    return os.index;
+  }
+
+  set dbOs(int value) {
+    os = Os.values[value];
+  }
+
+  Platform platform;
+
+  int get dbPlatform {
+    return platform.index;
+  }
+
+  set dbPlatform(int value) {
+    platform = Platform.values[value];
+  }
+
+  Application({
+    this.id = 0,
+    this.os = Os.unknown,
+    this.platform = Platform.unknown,
+    this.description,
+    this.iconUrl,
+    required this.name,
+    required this.displayName,
+    required this.remoteId,
+  }) : super();
+
+  Application copyWith({
+    int? id,
+    String? name,
+    String? remoteId,
+    String? iconUrl,
+    String? displayName,
+    Platform? platform,
+    String? description,
+    Os? os,
+  }) {
     return Application(
       id: id ?? this.id,
       name: name ?? this.name,
+      os: os ?? this.os,
+      platform: platform ?? this.platform,
+      iconUrl: iconUrl ?? this.iconUrl,
+      description: description ?? this.description,
+      displayName: displayName ?? this.displayName,
       remoteId: remoteId ?? this.remoteId,
     );
   }
@@ -30,6 +75,11 @@ class Application extends RemoteObject {
     final box = store.box<Application>();
     final app = Application(
       name: appDto.name,
+      displayName: appDto.displayName,
+      os: appDto.os,
+      iconUrl: appDto.iconUrl,
+      platform: appDto.platform,
+      description: appDto.description,
       remoteId: appDto.id,
     );
     app.owner.target = Owner.createFromDto(appDto.owner, store);
