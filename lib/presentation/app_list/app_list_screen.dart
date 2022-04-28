@@ -47,14 +47,33 @@ class AppListScreen extends StatelessWidget {
                 ),
               ),
             ),
-            content: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemBuilder: (context, index) {
-                final bundledApp = state.bundledApplications[index];
-                return AppItem(bundledApplication: bundledApp);
-              },
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemCount: state.bundledApplications.length,
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (state.loading) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                        .copyWith(bottom: 10),
+                    child: const ProgressBar(),
+                  ),
+                ] else ...[
+                  const SizedBox(
+                    height: 14.5,
+                  ),
+                ],
+                Expanded(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemBuilder: (context, index) {
+                      final bundledApp = state.bundledApplications[index];
+                      return AppItem(bundledApplication: bundledApp);
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemCount: state.bundledApplications.length,
+                  ),
+                ),
+              ],
             ),
           );
         },

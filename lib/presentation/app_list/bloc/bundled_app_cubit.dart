@@ -13,10 +13,10 @@ class BundledAppCubit extends Cubit<BundledAppState> {
       : _bundledApplicationRepository = bundledApplicationRepository,
         super(BundledAppState()) {
     bundledApplicationRepository.bundledApplications.listen((event) {
-      print('called');
       final apps = event.find();
       emit(state.copyWith(bundledApplications: apps));
     });
+    refresh();
   }
 
   final BundledApplicationRepository _bundledApplicationRepository;
@@ -31,7 +31,10 @@ class BundledAppCubit extends Cubit<BundledAppState> {
     _bundledApplicationRepository.addBundledApplication(bundledApplication);
   }
 
-  void refresh() {
-    _bundledApplicationRepository.refresh();
+  Future<void> refresh() async {
+    emit(state.copyWith(loading: true));
+    _bundledApplicationRepository
+        .refresh()
+        .whenComplete(() => emit(state.copyWith(loading: false)));
   }
 }
