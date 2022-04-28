@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 import 'package:appcenter_companion/repositories/application_repository.dart';
+import 'package:appcenter_companion/repositories/dto/ws_app_event.dart';
 import 'package:appcenter_companion/repositories/entities/application.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,11 +12,9 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'entities/bundled_application.dart';
 
 class BundledApplicationRepository {
-  BundledApplicationRepository(
-    Store store,
-    ApplicationRepository applicationRepository,
-    AppcenterHttp http,
-  )   : _store = store,
+  BundledApplicationRepository(Store store,
+      ApplicationRepository applicationRepository,
+      AppcenterHttp http,)   : _store = store,
         _http = http,
         _applicationRepository = applicationRepository {
     _box = _store.box<BundledApplication>();
@@ -43,9 +44,9 @@ class BundledApplicationRepository {
     // trigger the stream depends on relation too
     return Rx.combineLatest2(_box.query().watch(triggerImmediately: true),
         _store.box<Application>().query().watch(triggerImmediately: true),
-        (Query<BundledApplication> bundleAppleQuery, _) {
-      return bundleAppleQuery;
-    });
+            (Query<BundledApplication> bundleAppleQuery, _) {
+          return bundleAppleQuery;
+        });
   }
 
   void _disconnectAllWebSocket() {
@@ -68,8 +69,10 @@ class BundledApplicationRepository {
         final channel = WebSocketChannel.connect(Uri.parse(wsUrl.data['url']));
 
         channel.stream.listen(
-          (message) {
+              (message) {
             print('ws ${application.name} message: $message');
+            final data = WsAppEvent.fromJson(jsonDecode(message));
+            print(data);
             // channel.sink.close(status.goingAway);
           },
           onError: (error) {
@@ -88,9 +91,9 @@ class BundledApplicationRepository {
 
   Future<void> refresh() async {
     final bundledApps =
-        await bundledApplications.first.then((value) => value.find());
+    await bundledApplications.first.then((value) => value.find());
     final applications =
-        bundledApps.fold<List<Application>>([], (value, element) {
+    bundledApps.fold<List<Application>>([], (value, element) {
       for (final linkedApp in element.linkedApplications) {
         final app = linkedApp.branch.target!.application.target;
         if (app != null && !value.contains(app)) {
@@ -103,9 +106,7 @@ class BundledApplicationRepository {
         applications.map(_applicationRepository.fetchAppWithBranches));
   }
 
-  Future<void> addBundledApplication(
-    BundledApplication bundledApplication,
-  ) async {
+  Future<void> addBundledApplication(BundledApplication bundledApplication,) async {
     _box.put(bundledApplication);
   }
 }

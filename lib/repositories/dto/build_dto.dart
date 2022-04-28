@@ -25,5 +25,5 @@ abstract class BuildDto with _$BuildDto {
       _$BuildDtoFromJson(json);
 }
 
-enum BuildStatus { completed, notStarted, inProgress, unknown }
+enum BuildStatus { completed, notStarted, inProgress, cancelling, unknown }
 enum BuildResult { failed, canceled, succeeded, unknown }
