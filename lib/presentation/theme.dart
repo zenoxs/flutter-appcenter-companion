@@ -91,3 +91,19 @@ AccentColor get systemAccentColor {
   }
   return Colors.blue;
 }
+
+extension ThemeExt on ThemeData {
+  Color get positiveColor {
+    if (brightness.isLight) {
+      return Colors.green;
+    }
+    return Colors.green.dark;
+  }
+
+  Color get dangerColor {
+    if (brightness.isLight) {
+      return Colors.red;
+    }
+    return Colors.red.dark;
+  }
+}

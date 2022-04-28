@@ -1,6 +1,6 @@
+import 'package:appcenter_companion/presentation/widgets/build_status_indicator.dart';
 import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart';
 
 class AppItem extends StatelessWidget {
   final BundledApplication bundledApplication;
@@ -10,13 +10,26 @@ class AppItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expander(
-      // isButton: true,
-      // onPressed: () {
-      //   Navigator.of(context).push(FluentPageRoute(builder: (_) {
-      //     return AppDetailScreen();
-      //   }));
-      // },
-      headerHeight: 70,
+      initiallyExpanded: true,
+      trailing: Wrap(
+        runSpacing: 10,
+        spacing: 10,
+        children: bundledApplication.linkedApplications
+            .map(
+              (linkedApp) => Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    linkedApp.branch.target!.application.target!.name,
+                    style: FluentTheme.of(context).typography.body!.copyWith(
+                          color: FluentTheme.of(context).accentColor.normal,
+                        ),
+                  ),
+                ],
+              ),
+            )
+            .toList(),
+      ),
       header: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,34 +38,29 @@ class AppItem extends StatelessWidget {
             bundledApplication.name,
             style: FluentTheme.of(context).typography.subtitle,
           ),
-          const SizedBox(height: 5),
-          Wrap(
-            runSpacing: 10,
-            spacing: 10,
-            children: bundledApplication.linkedApplications
-                .map(
-                  (linkedApp) => Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        linkedApp.branch.target!.application.target!.name,
-                        style: FluentTheme.of(context)
-                            .typography
-                            .body!
-                            .copyWith(
-                              color: FluentTheme.of(context).accentColor.normal,
-                            ),
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
-          ),
         ],
       ),
-
-      content: const SizedBox(
-        child: Text('hello'),
+      content: Wrap(
+        spacing: 10,
+        children: bundledApplication.linkedApplications.map(
+          (linkedApp) {
+            final branch = linkedApp.branch.target;
+            return ListTile(
+              leading: BuildStatusIndicator(
+                status: branch?.lastBuild.target?.status,
+                result: branch?.lastBuild.target?.result,
+              ),
+              title: Wrap(
+                children: [
+                  Text(
+                    branch?.application.target?.name ?? '-',
+                  ),
+                ],
+              ),
+              subtitle: Text(branch?.name ?? '-'),
+            );
+          },
+        ).toList(),
       ),
     );
   }
