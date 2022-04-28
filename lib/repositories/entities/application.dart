@@ -18,6 +18,14 @@ class Application extends RemoteObject {
   Application({this.id = 0, required this.name, required this.remoteId})
       : super();
 
+  Application copyWith({int? id, String? name, String? remoteId}) {
+    return Application(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      remoteId: remoteId ?? this.remoteId,
+    );
+  }
+
   static Application createFromDto(AppDto appDto, Store store) {
     final box = store.box<Application>();
     final app = Application(

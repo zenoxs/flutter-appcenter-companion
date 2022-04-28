@@ -39,7 +39,9 @@ class AppListScreen extends StatelessWidget {
                     ),
                     CommandBarButton(
                       icon: const Icon(FluentIcons.refresh),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<BundledAppCubit>().refresh();
+                      },
                     ),
                   ],
                 ),

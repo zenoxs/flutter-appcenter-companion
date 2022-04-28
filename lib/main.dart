@@ -61,12 +61,20 @@ Future<void> main() async {
       AuthenticationInterceptor(tokenRepository);
   appcenterHttp.interceptors.add(authenticationInterceptor);
 
-  final ApplicationRepository applicationRepository =
-      ApplicationRepository(appcenterHttp, store, authenticationCubit);
-  final BundledApplicationRepository bundledApplicationRepository =
-      BundledApplicationRepository(store);
   final BranchRepository branchRepository =
       BranchRepository(appcenterHttp, store);
+  final ApplicationRepository applicationRepository = ApplicationRepository(
+    appcenterHttp,
+    store,
+    authenticationCubit,
+    branchRepository,
+  );
+  final BundledApplicationRepository bundledApplicationRepository =
+      BundledApplicationRepository(
+    store,
+    applicationRepository,
+    appcenterHttp,
+  );
 
   final AppcenterWsCubit appcenterWsCubit = AppcenterWsCubit(
     appcenterHttp,

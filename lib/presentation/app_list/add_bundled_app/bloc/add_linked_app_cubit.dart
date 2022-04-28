@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appcenter_companion/repositories/application_repository.dart';
 import 'package:appcenter_companion/repositories/branch_repository.dart';
 import 'package:appcenter_companion/repositories/entities/entities.dart';
@@ -5,22 +7,24 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'add_linked_app_cubit.freezed.dart';
+
 part 'add_linked_app_state.dart';
 
 class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
-  AddLinkedAppCubit(
-    ApplicationRepository applicationRepository,
-    BranchRepository branchRepository,
-  )   : _applicationRepository = applicationRepository,
+  AddLinkedAppCubit(ApplicationRepository applicationRepository,
+      BranchRepository branchRepository,)   : _applicationRepository = applicationRepository,
         _branchRepository = branchRepository,
         super(AddLinkedAppState()) {
-    applicationRepository.applications.listen((event) {
+    _applicationsSubscription =
+        applicationRepository.applications.listen((event) {
       emit(state.copyWith(applications: event.find()));
     });
+    _applicationRepository.fetchAllApps();
   }
 
   final ApplicationRepository _applicationRepository;
   final BranchRepository _branchRepository;
+  late final StreamSubscription _applicationsSubscription;
 
   Future<void> selectApplication(Application application) async {
     emit(
@@ -33,7 +37,7 @@ class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
     );
     _branchRepository.fetchBranchByApplication(application).then((branches) {
       final configuredBranches =
-          branches.where((branch) => branch.configured).toList();
+      branches.where((branch) => branch.configured).toList();
       emit(
         state.copyWith(branches: configuredBranches),
       );
@@ -46,5 +50,11 @@ class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
         selectedBranch: branch,
       ),
     );
+  }
+
+  @override
+  Future<void> close() {
+    _applicationsSubscription.cancel();
+    return super.close();
   }
 }

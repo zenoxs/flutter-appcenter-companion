@@ -22,7 +22,7 @@ class AppcenterWsCubit extends Cubit<AppcenterWsState> {
         super(AppcenterWsInitial()) {
     _applicationRepository.applications.listen((appQuery) {
       _disconnect();
-      _connect(appQuery.find());
+      // _connect(appQuery.find());
     });
   }
 
