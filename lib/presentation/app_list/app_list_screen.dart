@@ -1,6 +1,5 @@
-import 'package:appcenter_companion/presentation/app_detail/app_detail_screen.dart';
 import 'package:appcenter_companion/presentation/app_list/add_bundled_app/add_bundled_app_dialog.dart';
-import 'package:appcenter_companion/presentation/widgets/fluent_card.dart';
+import 'package:appcenter_companion/presentation/app_list/app_item.dart';
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,56 +49,7 @@ class AppListScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemBuilder: (context, index) {
                 final bundledApp = state.bundledApplications[index];
-                // TODO: create a widget for this
-                return FluentCard(
-                  isButton: true,
-                  onPressed: () {
-                    Navigator.of(context).push(FluentPageRoute(builder: (_) {
-                      return AppDetailScreen();
-                    }));
-                  },
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        bundledApp.name,
-                        style: FluentTheme.of(context).typography.subtitle,
-                      ),
-                      const SizedBox(height: 5),
-                      Wrap(
-                        runSpacing: 10,
-                        spacing: 10,
-                        children: bundledApp.linkedApplications
-                            .map(
-                              (linkedApp) => Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    linkedApp.branch.target!.application.target!
-                                        .name,
-                                    style: FluentTheme.of(context)
-                                        .typography
-                                        .body!
-                                        .copyWith(
-                                          color: FluentTheme.of(context)
-                                              .accentColor
-                                              .normal,
-                                        ),
-                                  ),
-                                  if (linkedApp.branch.target?.lastBuild.target
-                                          ?.status !=
-                                      null)
-                                    Text(linkedApp.branch.target!.lastBuild
-                                        .target!.status)
-                                ],
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                );
+                return AppItem(bundledApplication: bundledApp);
               },
               separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemCount: state.bundledApplications.length,

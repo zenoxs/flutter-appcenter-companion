@@ -11,14 +11,36 @@ class Build {
   int id;
   final String buildNumber;
   final DateTime queueTime;
-  final DateTime startTime;
-  final DateTime finishTime;
+  final DateTime? startTime;
+  final DateTime? finishTime;
   final DateTime lastChangedDate;
-  final String status;
-  final String result;
   final String sourceVersion;
 
   final sourceBranch = ToOne<Branch>();
+
+  BuildStatus status;
+
+  int get dbStatus {
+    return status.index;
+  }
+
+  set dbStatus(int value) {
+    status = BuildStatus.values[value];
+  }
+
+  BuildResult? result;
+
+  int? get dbResult {
+    return result?.index;
+  }
+
+  set dbResult(int? value) {
+    if (value == null) {
+      result = null;
+    } else {
+      result = BuildResult.values[value];
+    }
+  }
 
   Build({
     this.id = 0,
@@ -27,8 +49,8 @@ class Build {
     required this.startTime,
     required this.finishTime,
     required this.lastChangedDate,
-    required this.status,
-    required this.result,
+    this.status = BuildStatus.unknown,
+    this.result = BuildResult.unknown,
     required this.sourceVersion,
   }) : super();
 
