@@ -1,0 +1,37 @@
+name: build
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    
+env:
+  flutter_version: '2.10.5' 
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{env.flutter_version}}
+          channel: 'stable'
+          cache: true
+          architecture: x64
+      - run: flutter config --enable-macos-desktop
+      - run: flutter build macos
+  build-windows:
+    runs-on: windows-latest
+    steps:
+     - uses: actions/checkout@v3
+     - uses: subosito/flutter-action@v2
+       with:
+          flutter-version: ${{env.flutter_version}}
+          channel: 'stable'
+          cache: true
+          architecture: x64
+     - run: flutter config --enable-windows-desktop
+     - run: flutter build windows
