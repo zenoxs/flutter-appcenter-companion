@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:appcenter_companion/repositories/entities/branch.dart';
 import 'package:appcenter_companion/repositories/entities/bundled_application.dart';
@@ -6,13 +8,15 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'bundled_app_cubit.freezed.dart';
+
 part 'bundled_app_state.dart';
 
 class BundledAppCubit extends Cubit<BundledAppState> {
   BundledAppCubit(BundledApplicationRepository bundledApplicationRepository)
       : _bundledApplicationRepository = bundledApplicationRepository,
         super(BundledAppState()) {
-    bundledApplicationRepository.bundledApplications.listen((event) {
+    _bundledApplicationSubscription =
+        bundledApplicationRepository.bundledApplications.listen((event) {
       final apps = event.find();
       emit(state.copyWith(bundledApplications: apps));
     });
@@ -20,6 +24,7 @@ class BundledAppCubit extends Cubit<BundledAppState> {
   }
 
   final BundledApplicationRepository _bundledApplicationRepository;
+  late final StreamSubscription _bundledApplicationSubscription;
 
   void addBundledApp(String name, List<Branch> linkedBranches) {
     final bundledApplication = BundledApplication(name: name);
@@ -36,5 +41,11 @@ class BundledAppCubit extends Cubit<BundledAppState> {
     _bundledApplicationRepository
         .refresh()
         .whenComplete(() => emit(state.copyWith(loading: false)));
+  }
+
+  @override
+  Future<void> close() {
+    _bundledApplicationSubscription.cancel();
+    return super.close();
   }
 }

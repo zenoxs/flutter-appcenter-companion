@@ -13,8 +13,9 @@ abstract class BuildDto with _$BuildDto {
     @JsonKey(nullable: true) DateTime? startTime,
     @JsonKey(nullable: true) DateTime? finishTime,
     DateTime lastChangedDate,
-    BuildStatus status,
-    @JsonKey(nullable: true) BuildResult? result,
+    @JsonKey(unknownEnumValue: BuildStatus.unknown) BuildStatus status,
+    @JsonKey(nullable: true, unknownEnumValue: BuildResult.unknown)
+        BuildResult? result,
     String reason,
     String sourceBranch,
     String sourceVersion,

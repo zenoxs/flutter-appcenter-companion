@@ -8,7 +8,7 @@ import 'branch.dart';
 @Entity()
 class Build {
   @Id(assignable: true)
-  int id;
+  int id; // TODO: potential conflict between app, choose use id and app + branch as remote id
   final String buildNumber;
   final DateTime queueTime;
   final DateTime? startTime;

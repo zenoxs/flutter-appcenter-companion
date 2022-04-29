@@ -16,13 +16,13 @@ class AppDto with _$AppDto {
   const factory AppDto(
     String id,
     String appSecret,
-    dynamic description,
+    @JsonKey(nullable: true) String? description,
     String displayName,
     String name,
-    Os os,
-    Platform platform,
+    @JsonKey(unknownEnumValue: Os.unknown) Os os,
+    @JsonKey(unknownEnumValue: Platform.unknown) Platform platform,
     String origin,
-    String iconUrl,
+    @JsonKey(nullable: true) String? iconUrl,
     DateTime createdAt,
     DateTime updatedAt,
     String releaseType,
@@ -65,18 +65,18 @@ enum Os {
 class OwnerDto with _$OwnerDto {
   const factory OwnerDto(
     String id,
-    String avatarUrl,
+    @JsonKey(nullable: true) String? avatarUrl,
     String displayName,
     dynamic email,
     String name,
-    OwnerType type,
+    @JsonKey(unknownEnumValue: OwnerType.unknown) OwnerType type,
   ) = _OwnerDto;
 
   factory OwnerDto.fromJson(Map<String, dynamic> json) =>
       _$OwnerDtoFromJson(json);
 }
 
-enum OwnerType { org, user }
+enum OwnerType { org, user, unknown }
 
 enum Platform {
   @JsonValue('React-Native')

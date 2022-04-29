@@ -1,27 +1,31 @@
-import 'dart:convert';
-
 import 'package:appcenter_companion/objectbox.g.dart';
+import 'package:appcenter_companion/repositories/app_websocket_channel.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 import 'package:appcenter_companion/repositories/application_repository.dart';
-import 'package:appcenter_companion/repositories/dto/ws_app_event.dart';
 import 'package:appcenter_companion/repositories/entities/application.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'dto/dto.dart';
+import 'entities/branch.dart';
 import 'entities/bundled_application.dart';
+import 'entities/entities.dart';
 
 class BundledApplicationRepository {
-  BundledApplicationRepository(Store store,
-      ApplicationRepository applicationRepository,
-      AppcenterHttp http,)   : _store = store,
+  BundledApplicationRepository(
+    Store store,
+    ApplicationRepository applicationRepository,
+    AppcenterHttp http,
+  )   : _store = store,
         _http = http,
         _applicationRepository = applicationRepository {
     _box = _store.box<BundledApplication>();
-    bundledApplications
+    _box
+        .query()
+        .watch(triggerImmediately: true)
         .debounceTime(
-      const Duration(seconds: 2),
-    ) // debounce to avoid spamming channel creation
+          const Duration(seconds: 1),
+        ) // debounce to avoid spamming channel creation
         .listen((event) {
       debugPrint('connect WS');
       final bundledApps = event.find();
@@ -38,62 +42,53 @@ class BundledApplicationRepository {
   final AppcenterHttp _http;
   final ApplicationRepository _applicationRepository;
   late final Box<BundledApplication> _box;
-  final Map<int, WebSocketChannel> _applicationWSChannels = {};
+  final List<AppWebSocketChannel> _applicationWSChannels = [];
 
   Stream<Query<BundledApplication>> get bundledApplications {
     // trigger the stream depends on relation too
-    return Rx.combineLatest2(_box.query().watch(triggerImmediately: true),
+    return Rx.combineLatest3(
+        _box.query().watch(triggerImmediately: true),
         _store.box<Application>().query().watch(triggerImmediately: true),
-            (Query<BundledApplication> bundleAppleQuery, _) {
-          return bundleAppleQuery;
-        });
+        _store.box<Branch>().query().watch(triggerImmediately: true),
+        (Query<BundledApplication> bundleAppleQuery, _, __) {
+      return bundleAppleQuery;
+    });
   }
 
   void _disconnectAllWebSocket() {
-    _applicationWSChannels.forEach((key, value) {
-      value.sink.close();
-    });
+    for (final channel in _applicationWSChannels) {
+      channel.close();
+    }
     _applicationWSChannels.clear();
   }
 
   Future<void> _connectWebSocket(BundledApplication bundledApplication) async {
     for (final linkedApp in bundledApplication.linkedApplications) {
       final application = linkedApp.branch.target?.application.target;
-      if (application != null &&
-          !_applicationWSChannels.containsKey(application.id)) {
-        // TODO: create dto
-        final wsUrl = await _http.post(
-          'apps/${application.owner.target!.name}/${application.name}/websockets',
+      if (application != null) {
+        final appWebSocket = await AppWebSocketChannel.connect(
+          http: _http,
+          linkedApplication: linkedApp,
         );
 
-        final channel = WebSocketChannel.connect(Uri.parse(wsUrl.data['url']));
-
-        channel.stream.listen(
-              (message) {
-            print('ws ${application.name} message: $message');
-            final data = WsAppEvent.fromJson(jsonDecode(message));
-            print(data);
-            // channel.sink.close(status.goingAway);
-          },
-          onError: (error) {
-            print('ws ${application.name} error: $error');
-          },
-          onDone: () {
-            print('ws ${application.name} done');
-          },
-        );
-
-        channel.sink.add('{"method":"watch-repo"}');
-        _applicationWSChannels[application.id] = channel;
+        appWebSocket.event.listen((event) {
+          if (event is WsAppEventBuild) {
+            final build = Build.createFromDto(event.data, _store);
+            final branch = linkedApp.branch.target!;
+            branch.lastBuild.target = build;
+            _store.box<Branch>().put(branch);
+          }
+        });
+        _applicationWSChannels.add(appWebSocket);
       }
     }
   }
 
   Future<void> refresh() async {
     final bundledApps =
-    await bundledApplications.first.then((value) => value.find());
+        await bundledApplications.first.then((value) => value.find());
     final applications =
-    bundledApps.fold<List<Application>>([], (value, element) {
+        bundledApps.fold<List<Application>>([], (value, element) {
       for (final linkedApp in element.linkedApplications) {
         final app = linkedApp.branch.target!.application.target;
         if (app != null && !value.contains(app)) {
@@ -106,7 +101,9 @@ class BundledApplicationRepository {
         applications.map(_applicationRepository.fetchAppWithBranches));
   }
 
-  Future<void> addBundledApplication(BundledApplication bundledApplication,) async {
+  Future<void> addBundledApplication(
+    BundledApplication bundledApplication,
+  ) async {
     _box.put(bundledApplication);
   }
 }
