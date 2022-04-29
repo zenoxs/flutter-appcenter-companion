@@ -21,17 +21,19 @@ jobs:
           channel: 'stable'
           cache: true
           architecture: x64
+      - run: flutter pub run build_runner build
       - run: flutter config --enable-macos-desktop
       - run: flutter build macos
   build-windows:
     runs-on: windows-latest
     steps:
-     - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
      - uses: subosito/flutter-action@v2
        with:
           flutter-version: ${{env.flutter_version}}
           channel: 'stable'
           cache: true
           architecture: x64
+      - run: flutter pub run build_runner build
      - run: flutter config --enable-windows-desktop
      - run: flutter build windows
