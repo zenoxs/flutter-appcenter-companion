@@ -21,6 +21,7 @@ jobs:
           channel: 'stable'
           cache: true
           architecture: x64
+      - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter config --enable-macos-desktop
       - run: flutter build macos
@@ -34,6 +35,7 @@ jobs:
           channel: 'stable'
           cache: true
           architecture: x64
+      - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
