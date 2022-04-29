@@ -8,7 +8,7 @@ import 'application.dart';
 
 @Entity()
 class Branch {
-  @Id()
+  @Id(assignable: true)
   int id;
   final String name;
 
@@ -38,7 +38,7 @@ class Branch {
       configured: branchDto.configured,
     );
     branch.lastBuild.target = branchDto.lastBuild != null
-        ? Build.createFromDto(branchDto.lastBuild!, store)
+        ? Build.createFromDto(branchDto.lastBuild!, branch, store)
         : null;
     branch.application.target = application;
 

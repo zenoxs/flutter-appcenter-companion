@@ -8,7 +8,7 @@ import 'remote_object.dart';
 
 @Entity()
 class Application extends RemoteObject {
-  @Id()
+  @Id(assignable: true)
   int id;
   final String name;
   final String displayName;

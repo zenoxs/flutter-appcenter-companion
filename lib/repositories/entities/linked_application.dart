@@ -5,7 +5,7 @@ import 'bundled_application.dart';
 
 @Entity()
 class LinkedApplication {
-  @Id()
+  @Id(assignable: true)
   int id;
 
   final branch = ToOne<Branch>();

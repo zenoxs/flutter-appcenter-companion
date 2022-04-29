@@ -70,8 +70,12 @@ class BundledApplicationRepository {
 
         appWebSocket.event.listen((event) {
           if (event is WsAppEventBuild) {
-            final build = Build.createFromDto(event.data, _store);
             final branch = linkedApp.branch.target!;
+            final build = Build.createFromDto(
+              event.data,
+              branch,
+              _store,
+            );
             branch.lastBuild.target = build;
             _store.box<Branch>().put(branch);
           }

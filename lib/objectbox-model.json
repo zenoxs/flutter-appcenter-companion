@@ -4,274 +4,266 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "2:5194904846177136040",
-      "lastPropertyId": "2:9176640136452781872",
-      "name": "BundledApplication",
+      "id": "1:333768224880770200",
+      "lastPropertyId": "9:330039917237609895",
+      "name": "Application",
       "properties": [
         {
-          "id": "1:3125874828090277319",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:9176640136452781872",
-          "name": "name",
-          "type": 9
-        }
-      ],
-      "relations": []
-    },
-    {
-      "id": "3:1607075984716929851",
-      "lastPropertyId": "3:7226250738711174189",
-      "name": "Owner",
-      "properties": [
-        {
-          "id": "1:885571394557772942",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:5909541658990819196",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:7226250738711174189",
-          "name": "remoteId",
-          "type": 9
-        }
-      ],
-      "relations": []
-    },
-    {
-      "id": "4:6858235358735394511",
-      "lastPropertyId": "7:7268137876275805664",
-      "name": "Branch",
-      "properties": [
-        {
-          "id": "1:4471885417659285597",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:3112690520338209029",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "5:260920688567799928",
-          "name": "lastBuildId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "5:71951896938070509",
-          "relationTarget": "Build"
-        },
-        {
-          "id": "6:3604014203993610507",
-          "name": "applicationId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "6:1741763973552374671",
-          "relationTarget": "Application"
-        },
-        {
-          "id": "7:7268137876275805664",
-          "name": "configured",
-          "type": 1
-        }
-      ],
-      "relations": []
-    },
-    {
-      "id": "5:5134526807934369821",
-      "lastPropertyId": "16:719261501133582769",
-      "name": "Build",
-      "properties": [
-        {
-          "id": "1:3421280129344047551",
+          "id": "1:8970608871814666199",
           "name": "id",
           "type": 6,
           "flags": 129
         },
         {
-          "id": "5:8208143309603642506",
-          "name": "buildNumber",
+          "id": "2:1296981490570282412",
+          "name": "name",
           "type": 9
         },
         {
-          "id": "6:2623012935941599357",
-          "name": "sourceBranchId",
+          "id": "3:1302310603724492263",
+          "name": "displayName",
+          "type": 9
+        },
+        {
+          "id": "4:7328525957857415639",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "5:4827115705031818654",
+          "name": "iconUrl",
+          "type": 9
+        },
+        {
+          "id": "6:9216678147970535625",
+          "name": "remoteId",
+          "type": 9
+        },
+        {
+          "id": "7:2646803086288604616",
+          "name": "ownerId",
           "type": 11,
           "flags": 520,
-          "indexId": "4:4660640855969646705",
-          "relationTarget": "Branch"
+          "indexId": "1:6653130899952260057",
+          "relationTarget": "Owner"
         },
         {
-          "id": "7:7660162360190954431",
-          "name": "queueTime",
-          "type": 10
-        },
-        {
-          "id": "8:8758841894948919900",
-          "name": "startTime",
-          "type": 10
-        },
-        {
-          "id": "9:1000436888968287035",
-          "name": "finishTime",
-          "type": 10
-        },
-        {
-          "id": "10:9207422518270155579",
-          "name": "lastChangedDate",
-          "type": 10
-        },
-        {
-          "id": "13:2989168303833139027",
-          "name": "sourceVersion",
-          "type": 9
-        },
-        {
-          "id": "15:2219787701944333640",
-          "name": "dbStatus",
+          "id": "8:4171330898890116422",
+          "name": "dbOs",
           "type": 6
         },
         {
-          "id": "16:719261501133582769",
-          "name": "dbResult",
+          "id": "9:330039917237609895",
+          "name": "dbPlatform",
           "type": 6
         }
       ],
       "relations": []
     },
     {
-      "id": "6:5058075974310476728",
-      "lastPropertyId": "4:6209210991435475742",
+      "id": "2:7725313498476227107",
+      "lastPropertyId": "5:8526041391419141686",
+      "name": "Branch",
+      "properties": [
+        {
+          "id": "1:5184639697734262239",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:609786842352558451",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7103204484222492096",
+          "name": "configured",
+          "type": 1
+        },
+        {
+          "id": "4:1419677284310631551",
+          "name": "lastBuildId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:6346180156906197559",
+          "relationTarget": "Build"
+        },
+        {
+          "id": "5:8526041391419141686",
+          "name": "applicationId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:8387405097071159175",
+          "relationTarget": "Application"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:1309236197424902720",
+      "lastPropertyId": "2:3584481644703175816",
+      "name": "BundledApplication",
+      "properties": [
+        {
+          "id": "1:177818630994648856",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:3584481644703175816",
+          "name": "name",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:6009223270510535281",
+      "lastPropertyId": "3:2808843827710994892",
       "name": "LinkedApplication",
       "properties": [
         {
-          "id": "1:5306910208921463484",
+          "id": "1:842864691273838676",
           "name": "id",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "3:5710496510220635414",
+          "id": "2:4877160690981222319",
           "name": "branchId",
           "type": 11,
           "flags": 520,
-          "indexId": "7:3345393863484330485",
+          "indexId": "4:955888373781822819",
           "relationTarget": "Branch"
         },
         {
-          "id": "4:6209210991435475742",
+          "id": "3:2808843827710994892",
           "name": "bundledApplicationId",
           "type": 11,
           "flags": 520,
-          "indexId": "8:7538323303535380606",
+          "indexId": "5:1360013780450514252",
           "relationTarget": "BundledApplication"
         }
       ],
       "relations": []
     },
     {
-      "id": "7:3498130517739517244",
-      "lastPropertyId": "9:6438854438657262708",
-      "name": "Application",
+      "id": "5:7819945818757515854",
+      "lastPropertyId": "3:1459622267249991865",
+      "name": "Owner",
       "properties": [
         {
-          "id": "1:654284039940909481",
+          "id": "1:8798634540581670381",
           "name": "id",
           "type": 6,
-          "flags": 1
+          "flags": 129
         },
         {
-          "id": "2:38711299468981456",
+          "id": "2:4736704481650444627",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:2633630747486776304",
-          "name": "displayName",
-          "type": 9
-        },
-        {
-          "id": "4:6930083218943065915",
-          "name": "description",
-          "type": 9
-        },
-        {
-          "id": "5:1695578569230117042",
-          "name": "iconUrl",
-          "type": 9
-        },
-        {
-          "id": "6:4762844403102466541",
+          "id": "3:1459622267249991865",
           "name": "remoteId",
           "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:5017965644451687838",
+      "lastPropertyId": "11:5703138611653084356",
+      "name": "Build",
+      "properties": [
+        {
+          "id": "1:5565795616255853343",
+          "name": "id",
+          "type": 6,
+          "flags": 129
         },
         {
-          "id": "7:3603113043734391543",
-          "name": "ownerId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "9:3946154626035411351",
-          "relationTarget": "Owner"
-        },
-        {
-          "id": "8:4265560915675095611",
-          "name": "dbOs",
+          "id": "2:6374781061687804639",
+          "name": "buildId",
           "type": 6
         },
         {
-          "id": "9:6438854438657262708",
-          "name": "dbPlatform",
+          "id": "3:5277642786519619675",
+          "name": "buildNumber",
+          "type": 9
+        },
+        {
+          "id": "4:8930116745939440221",
+          "name": "queueTime",
+          "type": 10
+        },
+        {
+          "id": "5:1195098282087087735",
+          "name": "startTime",
+          "type": 10
+        },
+        {
+          "id": "6:2294605639818539768",
+          "name": "finishTime",
+          "type": 10
+        },
+        {
+          "id": "7:7155697870495111928",
+          "name": "lastChangedDate",
+          "type": 10
+        },
+        {
+          "id": "8:3794828050006122278",
+          "name": "sourceVersion",
+          "type": 9
+        },
+        {
+          "id": "9:3054979219280543000",
+          "name": "sourceBranchId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:2949333759101658920",
+          "relationTarget": "Branch"
+        },
+        {
+          "id": "10:4586664255221742448",
+          "name": "dbStatus",
+          "type": 6
+        },
+        {
+          "id": "11:5703138611653084356",
+          "name": "dbResult",
           "type": 6
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "7:3498130517739517244",
-  "lastIndexId": "9:3946154626035411351",
-  "lastRelationId": "1:3461071677322813957",
+  "lastEntityId": "7:5017965644451687838",
+  "lastIndexId": "7:2949333759101658920",
+  "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    6952348076127927831
+    2994723913576838540
   ],
-  "retiredIndexUids": [
-    8901508737980051324,
-    5876135719220196589
-  ],
+  "retiredIndexUids": [],
   "retiredPropertyUids": [
-    6893674052952939522,
-    7245229792008905537,
-    5538867231579687099,
-    6624324710526241093,
-    9091318234769089309,
-    6880246115545605382,
-    5463099877600262706,
-    6998225867928450549,
-    8932748707468494803,
-    3952304366888997595,
-    8606353472020227808,
-    4328851163765222379,
-    2418371269408524668,
-    7503305214345549243,
-    6416787939095178261,
-    5834436687514148305,
-    164053757971700239,
-    7681409125377889388,
-    7252590905311880565
+    5661884206870009064,
+    2602812282463903818,
+    90500469266438097,
+    4138308706063322691,
+    5507071242516644729,
+    2976014864387782229,
+    7999086332006141751,
+    657706291220536415,
+    6092950733586339550,
+    575275366064354830,
+    720734127669596354
   ],
-  "retiredRelationUids": [
-    3461071677322813957
-  ],
+  "retiredRelationUids": [],
   "version": 1
 }

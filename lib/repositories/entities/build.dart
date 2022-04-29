@@ -1,5 +1,8 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/build_dto.dart';
+import 'package:collection/collection.dart';
+
+// ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
 
 import 'branch.dart';
@@ -8,7 +11,8 @@ import 'branch.dart';
 @Entity()
 class Build {
   @Id(assignable: true)
-  int id; // TODO: potential conflict between app, choose use id and app + branch as remote id
+  int id;
+  final int buildId;
   final String buildNumber;
   final DateTime queueTime;
   final DateTime? startTime;
@@ -45,6 +49,7 @@ class Build {
   Build({
     this.id = 0,
     required this.buildNumber,
+    required this.buildId,
     required this.queueTime,
     required this.startTime,
     required this.finishTime,
@@ -54,10 +59,15 @@ class Build {
     required this.sourceVersion,
   }) : super();
 
-  factory Build.createFromDto(BuildDto lastBuild, Store store) {
+  factory Build.createFromDto(
+    BuildDto lastBuild,
+    Branch branch,
+    Store store,
+  ) {
     final box = store.box<Build>();
+
     final build = Build(
-      id: lastBuild.id,
+      buildId: lastBuild.id,
       buildNumber: lastBuild.buildNumber,
       queueTime: lastBuild.queueTime,
       startTime: lastBuild.startTime,
@@ -67,6 +77,22 @@ class Build {
       result: lastBuild.result,
       sourceVersion: lastBuild.sourceVersion,
     );
+    build.sourceBranch.target = branch;
+
+    // check if there is a build with the same buildId, branch and application
+    final QueryBuilder<Build> builder =
+        box.query(Build_.buildId.equals(build.buildId));
+    builder.link(
+      Build_.sourceBranch,
+      Branch_.name.equals(branch.name),
+    );
+
+    final existingBuild = builder.build().find().firstWhereOrNull((build) {
+      return build.sourceBranch.target?.application.target?.remoteId ==
+          branch.application.target?.remoteId;
+    });
+
+    build.id = existingBuild?.id ?? 0;
     box.put(build);
     return build;
   }

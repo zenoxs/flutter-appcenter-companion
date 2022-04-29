@@ -8,7 +8,7 @@ import 'remote_object.dart';
 
 @Entity()
 class Owner implements RemoteObject {
-  @Id()
+  @Id(assignable: true)
   int id;
   final String name;
   @override

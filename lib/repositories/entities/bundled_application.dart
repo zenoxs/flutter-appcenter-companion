@@ -3,7 +3,7 @@ import 'package:objectbox/objectbox.dart';
 
 @Entity()
 class BundledApplication {
-  @Id()
+  @Id(assignable: true)
   int id;
   String name;
 
