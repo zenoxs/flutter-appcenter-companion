@@ -1,10 +1,10 @@
-import 'package:appcenter_companion/repositories/token_repository.dart';
+import 'package:appcenter_companion/repositories/authentication_repository.dart';
 import 'package:dio/dio.dart';
 
 class AuthenticationInterceptor extends InterceptorsWrapper {
-  final TokenRepository _tokenRepository;
+  final AuthenticationRepository _authenticationRepository;
 
-  AuthenticationInterceptor(this._tokenRepository) : super();
+  AuthenticationInterceptor(this._authenticationRepository) : super();
 
   @override
   Future onRequest(
@@ -15,9 +15,9 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
   }
 
   Future<RequestOptions> _addToken(RequestOptions options) async {
-    final token = await _tokenRepository.token.first;
-    if (token != null) {
-      options.headers['x-api-token'] = token;
+    final auth = await _authenticationRepository.stream.first;
+    if (auth is AuthenticationStateAuthenticated) {
+      options.headers['x-api-token'] = auth.token;
     }
 
     return options;

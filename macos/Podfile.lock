@@ -10,6 +10,8 @@ PODS:
     - ObjectBox (= 1.7.0)
   - path_provider_macos (0.0.1):
     - FlutterMacOS
+  - shared_preferences_macos (0.0.1):
+    - FlutterMacOS
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
   - window_manager (0.2.0):
@@ -21,6 +23,7 @@ DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - objectbox_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/objectbox_flutter_libs/macos`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
+  - shared_preferences_macos (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - window_manager (from `Flutter/ephemeral/.symlinks/plugins/window_manager/macos`)
 
@@ -39,6 +42,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/objectbox_flutter_libs/macos
   path_provider_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+  shared_preferences_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
   window_manager:
@@ -51,6 +56,7 @@ SPEC CHECKSUMS:
   ObjectBox: 6410cda891ee71682ea1b0330a9544c52b2ba988
   objectbox_flutter_libs: 52f3cbcb18604df4e4dd08fb513b9edf3f91b1af
   path_provider_macos: 160cab0d5461f0c0e02995469a98f24bdb9a3f1f
+  shared_preferences_macos: a64dc611287ed6cbe28fd1297898db1336975727
   url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3
   window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8
 

@@ -1,4 +1,4 @@
-import 'package:appcenter_companion/bloc/authentication/authentication_cubit.dart';
+import 'package:appcenter_companion/repositories/authentication_repository.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,12 +31,14 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
             placeholder: 'xaprjx4nyuu78w....',
           ),
           const SizedBox(height: 16),
-          BlocBuilder<AuthenticationCubit, AuthenticationState>(
-            builder: (context, state) {
-              final token = state.maybeWhen(
-                authenticated: (token) => token,
-                orElse: () => '<none>',
-              );
+          StreamBuilder(
+            stream: context.read<AuthenticationRepository>().stream,
+            builder: (context, AsyncSnapshot<AuthenticationState> snapshot) {
+              final token = snapshot.data?.maybeWhen(
+                    authenticated: (token, access) => token,
+                    orElse: () => null,
+                  ) ??
+                  '<none>';
               return SelectableText(
                 'Current token: $token',
               );
@@ -48,7 +50,9 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
         FilledButton(
           child: const Text('Save'),
           onPressed: () {
-            context.read<AuthenticationCubit>().login(_tokenController.text);
+            context
+                .read<AuthenticationRepository>()
+                .login(_tokenController.text);
           },
         ),
         Button(

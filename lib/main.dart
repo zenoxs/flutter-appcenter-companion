@@ -1,4 +1,3 @@
-import 'package:appcenter_companion/bloc/bloc.dart';
 import 'package:appcenter_companion/environment.dart';
 import 'package:appcenter_companion/interceptors/authentication_interceptor.dart';
 import 'package:appcenter_companion/presentation/app.dart';
@@ -50,15 +49,12 @@ Future<void> main() async {
 
   final Environment environment = Environment.fromEnvironment();
   final AppcenterHttp appcenterHttp = AppcenterHttp(environment);
-  final TokenRepository tokenRepository = TokenRepository();
+  final AuthenticationRepository authenticationRepository =
+      AuthenticationRepository(http: appcenterHttp);
 
-  final AuthenticationCubit authenticationCubit = AuthenticationCubit(
-    appcenterHttp,
-    tokenRepository,
-  );
   // set up interceptors
   final AuthenticationInterceptor authenticationInterceptor =
-      AuthenticationInterceptor(tokenRepository);
+      AuthenticationInterceptor(authenticationRepository);
   appcenterHttp.interceptors.add(authenticationInterceptor);
 
   final BranchRepository branchRepository =
@@ -79,18 +75,13 @@ Future<void> main() async {
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: environment),
-        RepositoryProvider.value(value: tokenRepository),
+        RepositoryProvider.value(value: authenticationRepository),
         RepositoryProvider.value(value: appcenterHttp),
         RepositoryProvider.value(value: applicationRepository),
         RepositoryProvider.value(value: branchRepository),
         RepositoryProvider.value(value: bundledApplicationRepository),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: authenticationCubit),
-        ],
-        child: const App(),
-      ),
+      child: const App(),
     ),
   );
 }

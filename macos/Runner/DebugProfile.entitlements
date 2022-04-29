@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>com.apple.security.app-sandbox</key>
-	<true/>
+	<false/>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>ac-companion</string>
@@ -15,8 +15,6 @@
 	<key>com.apple.security.network.server</key>
 	<true/>
 	<key>keychain-access-groups</key>
-	<array>
-		<string>$(AppIdentifierPrefix)com.zenox.appcenter-companion</string>
-	</array>
+	<array/>
 </dict>
 </plist>

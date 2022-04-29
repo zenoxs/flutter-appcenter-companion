@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:appcenter_companion/repositories/authentication_repository.dart';
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:appcenter_companion/repositories/entities/entities.dart';
 import 'package:bloc/bloc.dart';
@@ -9,7 +10,8 @@ part 'bundled_app_cubit.freezed.dart';
 part 'bundled_app_state.dart';
 
 class BundledAppCubit extends Cubit<BundledAppState> {
-  BundledAppCubit(BundledApplicationRepository bundledApplicationRepository)
+  BundledAppCubit(BundledApplicationRepository bundledApplicationRepository,
+      AuthenticationRepository authenticationRepository)
       : _bundledApplicationRepository = bundledApplicationRepository,
         super(BundledAppState()) {
     _bundledApplicationSubscription =
@@ -17,7 +19,11 @@ class BundledAppCubit extends Cubit<BundledAppState> {
       final apps = event.find();
       emit(state.copyWith(bundledApplications: apps));
     });
-    refresh();
+    authenticationRepository.stream
+        .firstWhere((auth) => auth is AuthenticationStateAuthenticated)
+        .then((_) {
+      refresh();
+    });
   }
 
   final BundledApplicationRepository _bundledApplicationRepository;

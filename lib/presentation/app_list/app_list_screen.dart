@@ -1,5 +1,6 @@
 import 'package:appcenter_companion/presentation/app_list/add_bundled_app/add_bundled_app_dialog.dart';
 import 'package:appcenter_companion/presentation/app_list/app_item.dart';
+import 'package:appcenter_companion/repositories/authentication_repository.dart';
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +13,10 @@ class AppListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          BundledAppCubit(context.read<BundledApplicationRepository>()),
+      create: (context) => BundledAppCubit(
+        context.read<BundledApplicationRepository>(),
+        context.read<AuthenticationRepository>(),
+      ),
       child: BlocBuilder<BundledAppCubit, BundledAppState>(
         builder: (context, state) {
           return ScaffoldPage(
