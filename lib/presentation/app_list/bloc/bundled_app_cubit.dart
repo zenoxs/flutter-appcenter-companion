@@ -10,9 +10,10 @@ part 'bundled_app_cubit.freezed.dart';
 part 'bundled_app_state.dart';
 
 class BundledAppCubit extends Cubit<BundledAppState> {
-  BundledAppCubit(BundledApplicationRepository bundledApplicationRepository,
-      AuthenticationRepository authenticationRepository)
-      : _bundledApplicationRepository = bundledApplicationRepository,
+  BundledAppCubit(
+    BundledApplicationRepository bundledApplicationRepository,
+    AuthenticationRepository authenticationRepository,
+  )   : _bundledApplicationRepository = bundledApplicationRepository,
         super(BundledAppState()) {
     _bundledApplicationSubscription =
         bundledApplicationRepository.bundledApplications.listen((event) {

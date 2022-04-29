@@ -48,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         selected: index,
         onChanged: (i) => setState(() => index = i),
         size: const NavigationPaneSize(
-          openMinWidth: 250,
-          openMaxWidth: 320,
+          openMinWidth: 200,
+          openMaxWidth: 280,
         ),
         header: Container(
           height: kOneLineTileHeight,
@@ -109,17 +109,16 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
           _LinkPaneItemAction(
             icon: const Icon(FluentIcons.user_sync),
             title: const Text('Login'),
-            action: () => showDialog(
-              context: context,
-              builder: (context) => const AuthenticationDialog(),
-            ),
+            action: onLogin,
           ),
         ],
       ),
       content: NavigationBody(
         index: index,
         children: [
-          const AppListScreen(),
+          AppListScreen(
+            onLogin: onLogin,
+          ),
           Container(),
           Container(),
           Container(),
@@ -130,6 +129,13 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
           Container(),
         ],
       ),
+    );
+  }
+
+  void onLogin() {
+    showDialog(
+      context: context,
+      builder: (context) => const AuthenticationDialog(),
     );
   }
 }
@@ -162,24 +168,25 @@ class _LinkPaneItemAction extends PaneItem {
     focusNode,
     autofocus = false,
   }) : super(
-    icon: icon,
-    title: title,
-    infoBadge: infoBadge,
-    focusNode: focusNode,
-    autofocus: autofocus,
-  );
+          icon: icon,
+          title: title,
+          infoBadge: infoBadge,
+          focusNode: focusNode,
+          autofocus: autofocus,
+        );
 
   final String? link;
   final VoidCallback? action;
 
   @override
-  Widget build(BuildContext context,
-      bool selected,
-      VoidCallback? onPressed, {
-        PaneDisplayMode? displayMode,
-        bool showTextOnTop = true,
-        bool? autofocus,
-      }) {
+  Widget build(
+    BuildContext context,
+    bool selected,
+    VoidCallback? onPressed, {
+    PaneDisplayMode? displayMode,
+    bool showTextOnTop = true,
+    bool? autofocus,
+  }) {
     if (link != null) {
       return Link(
         uri: Uri.parse(link!),
