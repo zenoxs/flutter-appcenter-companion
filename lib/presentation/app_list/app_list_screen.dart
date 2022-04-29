@@ -18,7 +18,7 @@ class AppListScreen extends StatelessWidget {
         builder: (context, state) {
           return ScaffoldPage(
             header: PageHeader(
-              title: const Text('Bundle Applications'),
+              title: const Text('Bundled Applications'),
               commandBar: SizedBox(
                 width: 300,
                 child: CommandBar(
