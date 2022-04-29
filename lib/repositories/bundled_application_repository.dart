@@ -2,13 +2,10 @@ import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/app_websocket_channel.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 import 'package:appcenter_companion/repositories/application_repository.dart';
-import 'package:appcenter_companion/repositories/entities/application.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'dto/dto.dart';
-import 'entities/branch.dart';
-import 'entities/bundled_application.dart';
 import 'entities/entities.dart';
 
 class BundledApplicationRepository {
@@ -98,7 +95,8 @@ class BundledApplicationRepository {
       return value;
     });
     await Future.wait(
-        applications.map(_applicationRepository.fetchAppWithBranches));
+      applications.map(_applicationRepository.fetchAppWithBranches),
+    );
   }
 
   Future<void> addBundledApplication(

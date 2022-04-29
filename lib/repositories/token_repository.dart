@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -7,8 +8,7 @@ class TokenRepository {
   final FlutterSecureStorage _storage;
 
   TokenRepository({FlutterSecureStorage? storage})
-      : _storage =
-            storage ?? const FlutterSecureStorage(mOptions: MacOsOptions()) {
+      : _storage = storage ?? const FlutterSecureStorage() {
     _restoreToken().then(
       (value) =>
           _tokenSubscription = token.skip(1).listen((t) => _persistToken(t)),
@@ -39,7 +39,7 @@ class TokenRepository {
     try {
       tokenValue = await _storage.read(key: 'token');
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
     }
     if (tokenValue != null) {
       _tokenController.add(tokenValue);

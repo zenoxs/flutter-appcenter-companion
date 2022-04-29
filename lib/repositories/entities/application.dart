@@ -1,5 +1,6 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/app_dto.dart';
+// ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
 
 import 'owner.dart';
@@ -71,7 +72,7 @@ class Application extends RemoteObject {
     );
   }
 
-  static Application createFromDto(AppDto appDto, Store store) {
+  factory Application.createFromDto(AppDto appDto, Store store) {
     final box = store.box<Application>();
     final app = Application(
       name: appDto.name,

@@ -1,16 +1,11 @@
-import 'dart:ui';
-
 import 'package:appcenter_companion/presentation/app_list/app_list_screen.dart';
 import 'package:appcenter_companion/presentation/home/authentication_dialog.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../theme.dart';
-
-const _appTitle = 'Appcenter Companion';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -124,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
       content: NavigationBody(
         index: index,
         children: [
-          AppListScreen(),
+          const AppListScreen(),
           Container(),
           Container(),
           Container(),

@@ -1,8 +1,11 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'app_dto.freezed.dart';
+
 part 'app_dto.g.dart';
 
 List<AppDto> appDtoFromJson(List<dynamic> data) =>
@@ -13,34 +16,30 @@ String appDtoToJson(List<AppDto> data) =>
 
 @freezed
 class AppDto with _$AppDto {
-  const factory AppDto(
-    String id,
-    String appSecret,
-    @JsonKey(nullable: true) String? description,
-    String displayName,
-    String name,
-    @JsonKey(unknownEnumValue: Os.unknown) Os os,
-    @JsonKey(unknownEnumValue: Platform.unknown) Platform platform,
-    String origin,
-    @JsonKey(nullable: true) String? iconUrl,
-    DateTime createdAt,
-    DateTime updatedAt,
-    String releaseType,
-    OwnerDto owner,
-    @JsonKey(nullable: true) AzureSubscription? azureSubscription,
-    List<MemberPermission> memberPermissions,
-  ) = _AppDto;
+  const factory AppDto(String id,
+      String appSecret,
+      @JsonKey(nullable: true) String? description,
+      String displayName,
+      String name,
+      @JsonKey(unknownEnumValue: Os.unknown) Os os,
+      @JsonKey(unknownEnumValue: Platform.unknown) Platform platform,
+      String origin,
+      @JsonKey(nullable: true) String? iconUrl,
+      DateTime createdAt,
+      DateTime updatedAt,
+      String releaseType,
+      OwnerDto owner,
+      @JsonKey(nullable: true) AzureSubscription? azureSubscription,
+      List<MemberPermission> memberPermissions,) = _AppDto;
 
   factory AppDto.fromJson(Map<String, dynamic> json) => _$AppDtoFromJson(json);
 }
 
 @freezed
 class AzureSubscription with _$AzureSubscription {
-  const factory AzureSubscription(
-    String subscriptionId,
-    String subscriptionName,
-    String tenantId,
-  ) = _AzureSubscription;
+  const factory AzureSubscription(String subscriptionId,
+      String subscriptionName,
+      String tenantId,) = _AzureSubscription;
 
   factory AzureSubscription.fromJson(Map<String, dynamic> json) =>
       _$AzureSubscriptionFromJson(json);
@@ -63,14 +62,12 @@ enum Os {
 
 @freezed
 class OwnerDto with _$OwnerDto {
-  const factory OwnerDto(
-    String id,
-    @JsonKey(nullable: true) String? avatarUrl,
-    String displayName,
-    dynamic email,
-    String name,
-    @JsonKey(unknownEnumValue: OwnerType.unknown) OwnerType type,
-  ) = _OwnerDto;
+  const factory OwnerDto(String id,
+      @JsonKey(nullable: true) String? avatarUrl,
+      String displayName,
+      dynamic email,
+      String name,
+      @JsonKey(unknownEnumValue: OwnerType.unknown) OwnerType type,) = _OwnerDto;
 
   factory OwnerDto.fromJson(Map<String, dynamic> json) =>
       _$OwnerDtoFromJson(json);

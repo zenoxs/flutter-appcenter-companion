@@ -66,7 +66,6 @@ Future<void> main() async {
   final ApplicationRepository applicationRepository = ApplicationRepository(
     appcenterHttp,
     store,
-    authenticationCubit,
     branchRepository,
   );
   final BundledApplicationRepository bundledApplicationRepository =

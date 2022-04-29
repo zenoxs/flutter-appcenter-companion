@@ -13,9 +13,9 @@ class AppDetailScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('App Detail'),
+        title: const Text('App Detail'),
       ),
-      content: Center(
+      content: const Center(
         child: Text('test'),
       ),
     );

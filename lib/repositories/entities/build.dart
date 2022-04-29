@@ -54,7 +54,7 @@ class Build {
     required this.sourceVersion,
   }) : super();
 
-  static Build createFromDto(BuildDto lastBuild, Store store) {
+  factory Build.createFromDto(BuildDto lastBuild, Store store) {
     final box = store.box<Build>();
     final build = Build(
       id: lastBuild.id,

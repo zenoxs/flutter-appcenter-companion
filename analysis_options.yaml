@@ -10,6 +10,7 @@ analyzer:
     - lib/generated_plugin_registrant.dart
     - lib/**/*.g.dart
     - lib/**/*.freezed.dart
+    - lib/objectbox.g.dart
   strong-mode:
     implicit-casts: true
     implicit-dynamic: true

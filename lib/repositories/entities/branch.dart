@@ -1,6 +1,7 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/branch_dto.dart';
 import 'package:appcenter_companion/repositories/entities/build.dart';
+// ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
 
 import 'application.dart';
@@ -26,8 +27,11 @@ class Branch {
     required this.configured,
   }) : super();
 
-  static Branch createFromDto(
-      BranchDto branchDto, Application application, Store store) {
+  factory Branch.createFromDto(
+    BranchDto branchDto,
+    Application application,
+    Store store,
+  ) {
     final box = store.box<Branch>();
     final branch = Branch(
       name: branchDto.branch.name,

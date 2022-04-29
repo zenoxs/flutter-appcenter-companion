@@ -1,5 +1,6 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/app_dto.dart';
+// ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
 
 import 'application.dart';
@@ -18,7 +19,7 @@ class Owner implements RemoteObject {
 
   Owner({this.id = 0, required this.name, required this.remoteId}) : super();
 
-  static Owner createFromDto(OwnerDto ownerDto, Store store) {
+  factory Owner.createFromDto(OwnerDto ownerDto, Store store) {
     final box = store.box<Owner>();
     final owner = Owner(
       remoteId: ownerDto.id,

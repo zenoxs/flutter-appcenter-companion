@@ -18,8 +18,11 @@ class FluentCard extends StatefulWidget {
     this.contentBackgroundColor,
   }) : super(key: key);
 
-  static Color backgroundColor(ThemeData style, Set<ButtonStates> states,
-      [bool isClickable = true]) {
+  static Color backgroundColor(
+    ThemeData style,
+    Set<ButtonStates> states, {
+    bool isClickable = true,
+  }) {
     if (style.brightness == Brightness.light) {
       if (!states.isDisabled && isClickable) {
         if (states.isPressing) return Colors.grey[50].withOpacity(0.22);
@@ -35,17 +38,23 @@ class FluentCard extends StatefulWidget {
     }
   }
 
-  static Color borderColor(ThemeData style, Set<ButtonStates> states,
-      [bool isClickable = true]) {
+  static Color borderColor(
+    ThemeData style,
+    Set<ButtonStates> states, {
+    bool isClickable = true,
+  }) {
     if (style.brightness == Brightness.light) {
-      if (isClickable && states.isHovering && !states.isPressing)
+      if (isClickable && states.isHovering && !states.isPressing) {
         return const Color(0xFF212121).withOpacity(0.22);
+      }
       return const Color(0xFF212121).withOpacity(0.17);
     } else {
-      if (isClickable && states.isPressing)
+      if (isClickable && states.isPressing) {
         return Colors.white.withOpacity(0.062);
-      if (isClickable && states.isHovering)
+      }
+      if (isClickable && states.isHovering) {
         return Colors.white.withOpacity(0.02);
+      }
       return Colors.black.withOpacity(0.52);
     }
   }
@@ -115,12 +124,10 @@ class FluentCardState extends State<FluentCard>
     with SingleTickerProviderStateMixin {
   late ThemeData theme;
 
-  late AnimationController _controller;
-
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    AnimationController(
       vsync: this,
       duration: widget.animationDuration ?? const Duration(milliseconds: 150),
     );
@@ -139,71 +146,88 @@ class FluentCardState extends State<FluentCard>
           : IconTheme.merge(
               data: IconThemeData(color: theme.disabledColor),
               child: DefaultTextStyle.merge(
-                  style: TextStyle(color: theme.disabledColor), child: child));
+                style: TextStyle(color: theme.disabledColor),
+                child: child,
+              ),
+            );
 
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasFluentTheme(context));
     final isLtr = Directionality.of(context) == TextDirection.ltr;
     theme = FluentTheme.of(context);
-    bool isDark = theme.brightness == Brightness.dark;
+    final isDark = theme.brightness == Brightness.dark;
 
-    return buttonStyled(HoverButton(
-      onPressed:
-          widget.onPressed ?? (widget.isButton ? null : emptyPressMethod),
-      builder: (context, states) {
-        return AnimatedContainer(
-          duration: expanderAnimationDuration,
-          height: widget.headerHeight,
-          decoration: BoxDecoration(
-            color: FluentCard.backgroundColor(
-                theme, states, widget.onPressed != null),
-            border: Border.all(
-              width: borderSize,
-              color: FluentCard.borderColor(
-                  theme, states, widget.onPressed != null),
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-          ),
-          padding: const EdgeInsetsDirectional.only(start: 16.0),
-          alignment: Alignment.centerLeft,
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            if (widget.leading != null)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 17.0),
-                child: widget.leading!,
+    return buttonStyled(
+      HoverButton(
+        onPressed:
+            widget.onPressed ?? (widget.isButton ? null : emptyPressMethod),
+        builder: (context, states) {
+          return AnimatedContainer(
+            duration: expanderAnimationDuration,
+            height: widget.headerHeight,
+            decoration: BoxDecoration(
+              color: FluentCard.backgroundColor(
+                theme,
+                states,
+                isClickable: widget.onPressed != null,
               ),
-            Expanded(child: widget.content),
-            if (widget.trailing != null)
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.only(start: 20.0, end: 13.5),
-                child: widget.trailing!,
-              ),
-            if (widget.icon != null || widget.isButton)
-              Container(
-                margin: EdgeInsetsDirectional.only(
-                  start: widget.trailing != null ? 8.0 : 20.0,
-                  end: 8.0,
-                  top: 8.0,
-                  bottom: 8.0,
+              border: Border.all(
+                width: borderSize,
+                color: FluentCard.borderColor(
+                  theme,
+                  states,
+                  isClickable: widget.onPressed != null,
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                alignment: Alignment.center,
-                child: widget.icon ??
-                    Icon(
-                        isLtr
-                            ? isDark
-                                ? FluentIcons.chevron_right
-                                : FluentIcons.chevron_right_med
-                            : isDark
-                                ? FluentIcons.chevron_left
-                                : FluentIcons.chevron_left_med,
-                        size: 11),
               ),
-          ]),
-        );
-      },
-    ));
+              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+            ),
+            padding: const EdgeInsetsDirectional.only(start: 16.0),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.leading != null)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 17.0),
+                    child: widget.leading,
+                  ),
+                Expanded(child: widget.content),
+                if (widget.trailing != null)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 20.0,
+                      end: 13.5,
+                    ),
+                    child: widget.trailing,
+                  ),
+                if (widget.icon != null || widget.isButton)
+                  Container(
+                    margin: EdgeInsetsDirectional.only(
+                      start: widget.trailing != null ? 8.0 : 20.0,
+                      end: 8.0,
+                      top: 8.0,
+                      bottom: 8.0,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    alignment: Alignment.center,
+                    child: widget.icon ??
+                        Icon(
+                          isLtr
+                              ? isDark
+                                  ? FluentIcons.chevron_right
+                                  : FluentIcons.chevron_right_med
+                              : isDark
+                                  ? FluentIcons.chevron_left
+                                  : FluentIcons.chevron_left_med,
+                          size: 11,
+                        ),
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

@@ -58,13 +58,14 @@ class AppWebSocketChannel {
     required LinkedApplication linkedApplication,
   }) async {
     final application = linkedApplication.branch.target!.application.target!;
-    final wsUrl = await http.post(
+    final res = await http.post(
       'apps/${application.owner.target!.name}/${application.name}/websockets',
     );
+    final data = CreateWSResponseDto.fromJson(res.data);
 
     return AppWebSocketChannel._(
       linkedApplication: linkedApplication,
-      wsUrl: wsUrl.data['url'],
+      wsUrl: data.url,
     );
   }
 

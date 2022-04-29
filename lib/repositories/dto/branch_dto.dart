@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_annotation_target, avoid_positional_boolean_parameters
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,10 +18,12 @@ String branchDtoToJson(List<BranchDto> data) =>
 @freezed
 abstract class BranchDto with _$BranchDto {
   @JsonSerializable(fieldRename: FieldRename.none)
-  const factory BranchDto(BranchValueDto branch,
-      bool configured,
-      @JsonKey(nullable: true) BuildDto? lastBuild,
-      @JsonKey(nullable: true) String? trigger,) = _BranchDto;
+  const factory BranchDto(
+    BranchValueDto branch,
+    bool configured,
+    @JsonKey(nullable: true) BuildDto? lastBuild,
+    @JsonKey(nullable: true) String? trigger,
+  ) = _BranchDto;
 
   factory BranchDto.fromJson(Map<String, dynamic> json) =>
       _$BranchDtoFromJson(json);
@@ -28,10 +31,8 @@ abstract class BranchDto with _$BranchDto {
 
 @freezed
 abstract class BranchValueDto with _$BranchValueDto {
-  const factory BranchValueDto(
-    String name,
-    BranchCommitDto commit,
-  ) = _BranchValueDto;
+  const factory BranchValueDto(String name,
+      BranchCommitDto commit,) = _BranchValueDto;
 
   factory BranchValueDto.fromJson(Map<String, dynamic> json) =>
       _$BranchValueDtoFromJson(json);

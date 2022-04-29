@@ -1,6 +1,4 @@
 import 'package:appcenter_companion/presentation/app_list/add_bundled_app/add_linked_app_dialog.dart';
-import 'package:appcenter_companion/repositories/application_repository.dart';
-import 'package:appcenter_companion/repositories/branch_repository.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,10 +14,7 @@ class AddBundledAppDialog extends StatefulWidget {
 
 class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
   final TextEditingController _nameController = TextEditingController();
-  late final AddBundledAppCubit _addBundledAppCubit = AddBundledAppCubit(
-    context.read<ApplicationRepository>(),
-    context.read<BranchRepository>(),
-  );
+  late final AddBundledAppCubit _addBundledAppCubit = AddBundledAppCubit();
 
   @override
   Widget build(BuildContext context) {
@@ -55,23 +50,19 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
                     if (state.linkedBranches.isEmpty) {
                       return Text(
                         'You need at least one linked application to add a bundled app.',
-                        style: FluentTheme
-                            .of(context)
-                            .typography
-                            .caption,
+                        style: FluentTheme.of(context).typography.caption,
                       );
                     }
                     return TreeView(
                       items: [
                         ...state.linkedBranches.map(
-                              (branch) =>
-                              TreeViewItem(
-                                key: Key(branch.id.toString()),
-                                content: Text(
-                                    '${branch.application.target!.name}/${branch
-                                        .name}'),
-                                value: branch,
-                              ),
+                          (branch) => TreeViewItem(
+                            key: Key(branch.id.toString()),
+                            content: Text(
+                              '${branch.application.target!.name}/${branch.name}',
+                            ),
+                            value: branch,
+                          ),
                         )
                       ],
                     );
@@ -85,11 +76,10 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (_) =>
-                      BlocProvider.value(
-                        value: _addBundledAppCubit,
-                        child: const AddLinkedAppDialog(),
-                      ),
+                  builder: (_) => BlocProvider.value(
+                    value: _addBundledAppCubit,
+                    child: const AddLinkedAppDialog(),
+                  ),
                 );
               },
             )
@@ -100,8 +90,8 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
             child: const Text('Add'),
             onPressed: () {
               context.read<BundledAppCubit>().addBundledApp(
-                _nameController.text,
-                _addBundledAppCubit.state.linkedBranches,
+                    _nameController.text,
+                    _addBundledAppCubit.state.linkedBranches,
                   );
               Navigator.pop(context);
             },

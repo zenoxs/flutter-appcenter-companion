@@ -1,4 +1,3 @@
-import 'package:appcenter_companion/bloc/authentication/authentication_cubit.dart';
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/appcenter_http.dart';
 import 'package:appcenter_companion/repositories/branch_repository.dart';
@@ -10,17 +9,11 @@ class ApplicationRepository {
   ApplicationRepository(
     AppcenterHttp http,
     Store store,
-    AuthenticationCubit authenticationCubit,
     BranchRepository branchRepository,
   )   : _http = http,
         _store = store,
         _branchRepository = branchRepository {
     _box = _store.box<Application>();
-    // authenticationCubit.stream.distinct().listen((state) {
-    //   if (state is AuthenticationStateAuthenticated) {
-    //     fetchAllApps();
-    //   }
-    // });
   }
 
   final AppcenterHttp _http;

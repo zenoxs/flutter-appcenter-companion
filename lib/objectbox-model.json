@@ -4,63 +4,6 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:6952348076127927831",
-      "lastPropertyId": "10:7252590905311880565",
-      "name": "Application",
-      "properties": [
-        {
-          "id": "1:8606353472020227808",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:4328851163765222379",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:2418371269408524668",
-          "name": "remoteId",
-          "type": 9
-        },
-        {
-          "id": "4:7503305214345549243",
-          "name": "ownerId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "1:6596460256617380807",
-          "relationTarget": "Owner"
-        },
-        {
-          "id": "5:6416787939095178261",
-          "name": "displayName",
-          "type": 9
-        },
-        {
-          "id": "7:5834436687514148305",
-          "name": "dbOs",
-          "type": 6
-        },
-        {
-          "id": "8:164053757971700239",
-          "name": "description",
-          "type": 9
-        },
-        {
-          "id": "9:7681409125377889388",
-          "name": "iconUrl",
-          "type": 9
-        },
-        {
-          "id": "10:7252590905311880565",
-          "name": "dbPlatform",
-          "type": 6
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "2:5194904846177136040",
       "lastPropertyId": "2:9176640136452781872",
       "name": "BundledApplication",
@@ -234,15 +177,74 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "7:3498130517739517244",
+      "lastPropertyId": "9:6438854438657262708",
+      "name": "Application",
+      "properties": [
+        {
+          "id": "1:654284039940909481",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:38711299468981456",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:2633630747486776304",
+          "name": "displayName",
+          "type": 9
+        },
+        {
+          "id": "4:6930083218943065915",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "5:1695578569230117042",
+          "name": "iconUrl",
+          "type": 9
+        },
+        {
+          "id": "6:4762844403102466541",
+          "name": "remoteId",
+          "type": 9
+        },
+        {
+          "id": "7:3603113043734391543",
+          "name": "ownerId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "9:3946154626035411351",
+          "relationTarget": "Owner"
+        },
+        {
+          "id": "8:4265560915675095611",
+          "name": "dbOs",
+          "type": 6
+        },
+        {
+          "id": "9:6438854438657262708",
+          "name": "dbPlatform",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "6:5058075974310476728",
-  "lastIndexId": "8:7538323303535380606",
+  "lastEntityId": "7:3498130517739517244",
+  "lastIndexId": "9:3946154626035411351",
   "lastRelationId": "1:3461071677322813957",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    6952348076127927831
+  ],
   "retiredIndexUids": [
     8901508737980051324,
     5876135719220196589
@@ -257,7 +259,16 @@
     5463099877600262706,
     6998225867928450549,
     8932748707468494803,
-    3952304366888997595
+    3952304366888997595,
+    8606353472020227808,
+    4328851163765222379,
+    2418371269408524668,
+    7503305214345549243,
+    6416787939095178261,
+    5834436687514148305,
+    164053757971700239,
+    7681409125377889388,
+    7252590905311880565
   ],
   "retiredRelationUids": [
     3461071677322813957
