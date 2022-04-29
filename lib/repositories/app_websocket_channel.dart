@@ -18,11 +18,18 @@ class AppWebSocketChannel {
       (message) {
         debugPrint('ws ${_application.name} message: $message');
         final event = WsAppEvent.fromJson(jsonDecode(message));
-        _eventController.add(event);
-        if (event is WsAppEventBuild &&
-            !_subscribedBuildIds.contains(event.data.id)) {
-          _method(WsMethod.subscribe(event.data.id));
-          _subscribedBuildIds.add(event.data.id);
+
+        if (event is WsAppEventBuild) {
+          if (event.data.sourceBranch ==
+              _linkedApplication.branch.target!.name) {
+            if (!_subscribedBuildIds.contains(event.data.id)) {
+              _method(WsMethod.subscribe(event.data.id));
+              _subscribedBuildIds.add(event.data.id);
+            }
+            _eventController.add(event);
+          }
+        } else {
+          _eventController.add(event);
         }
       },
       onError: (error) {

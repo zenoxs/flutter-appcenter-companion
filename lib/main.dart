@@ -76,12 +76,6 @@ Future<void> main() async {
     appcenterHttp,
   );
 
-  final AppcenterWsCubit appcenterWsCubit = AppcenterWsCubit(
-    appcenterHttp,
-    applicationRepository,
-    authenticationCubit,
-  );
-
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -95,7 +89,6 @@ Future<void> main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider.value(value: authenticationCubit),
-          BlocProvider.value(value: appcenterWsCubit),
         ],
         child: const App(),
       ),

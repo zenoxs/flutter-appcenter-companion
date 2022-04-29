@@ -40,6 +40,8 @@ class BuildStatusIndicator extends StatelessWidget {
     } else if (status == BuildStatus.notStarted) {
       icon = FluentIcons.away_status;
       color = FluentTheme.of(context).accentColor;
+    } else if (status == BuildStatus.cancelling) {
+      icon = FluentIcons.blocked2_solid;
     }
 
     final iconWidget = Icon(
