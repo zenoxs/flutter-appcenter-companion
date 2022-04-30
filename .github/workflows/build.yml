@@ -8,16 +8,18 @@ on:
   workflow_dispatch:
     
 env:
-  flutter_version: '2.10.5' 
+  FLUTTER_VERSION: '2.10.5' 
 
 jobs:
   build-macos:
     runs-on: macos-latest
+    env:
+      MACOS_APP_RELEASE_PATH: build/macos/Build/Products/Release
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{env.flutter_version}}
+          flutter-version: ${{env.FLUTTER_VERSION}}
           channel: 'stable'
           cache: true
           architecture: x64
@@ -25,13 +27,34 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter config --enable-macos-desktop
       - run: flutter build macos
+      - name: Create dmg
+        run: |
+          brew install create-dmg
+          cd $MACOS_APP_RELEASE_PATH
+          create-dmg \
+            --volname "AC Companion" \
+            --window-pos 200 120 \
+            --window-size 800 529 \
+            --icon-size 130 \
+            --text-size 14 \
+            --icon "AC Companion.app" 260 250 \
+            --hide-extension "AC Companion.app" \
+            --app-drop-link 540 250 \
+            --hdiutil-quiet \
+            "AC Companion.dmg" \
+            "AC Companion.app"
+      - name: Upload macos dmg
+        uses: actions/upload-artifact@v3
+        with:
+          name: ac_companion.dmg
+          path: ${{env.FLUTTER_VERSION}}/"AC Companion.dmg"
   build-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{env.flutter_version}}
+          flutter-version: ${{env.FLUTTER_VERSION}}
           channel: 'stable'
           cache: true
           architecture: x64
@@ -39,3 +62,28 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
+  release:
+    name: Release
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create Version Number
+        id: versions
+        run: |
+          git fetch
+          VERSION_WITHOUT_SUFFIX="$(grep 'version:' pubspec.yaml | awk '{ print $2 }' | cut -d'+' -f 1)"
+          function parse_git_hash() {
+            git rev-list --count origin/main
+          }
+          MAIN_COUNT=$(parse_git_hash)
+          APP_VERSION="$VERSION_WITHOUT_SUFFIX+$MAIN_COUNT"
+          echo "::set-output name=version::$(echo $APP_VERSION)"
+      - name: Download dmg
+        uses: actions/download-artifact@v3
+        with:
+          name: ac_companion.dmg
+      - name: Debug
+        shell: bash
+        run: |
+          echo | ls
