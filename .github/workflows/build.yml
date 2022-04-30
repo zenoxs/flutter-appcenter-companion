@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ac_companion.dmg
-          path: ${{env.FLUTTER_VERSION}}/"AC Companion.dmg"
+          path: "${{env.FLUTTER_VERSION}}/AC Companion.dmg"
   build-windows:
     runs-on: windows-latest
     steps:
