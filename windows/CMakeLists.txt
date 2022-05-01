@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(appcenter_companion LANGUAGES CXX)
+project(ac_companion LANGUAGES CXX)
 
-set(BINARY_NAME "appcenter_companion")
+set(BINARY_NAME "ac_companion")
 
 cmake_policy(SET CMP0063 NEW)
 
