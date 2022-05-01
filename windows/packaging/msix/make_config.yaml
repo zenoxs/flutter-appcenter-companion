@@ -1,0 +1,4 @@
+display_name: AC Companion
+msix_version: 1.0.0.0
+install_certificate: 'false'
+# logo_path: C:\path\to\logo.png
