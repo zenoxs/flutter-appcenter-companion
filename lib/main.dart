@@ -40,7 +40,6 @@ Future<void> main() async {
       );
       await windowManager.setMinimumSize(const Size(755, 545));
       await windowManager.show();
-      await windowManager.setPreventClose(true);
       await windowManager.setSkipTaskbar(false);
     });
   }

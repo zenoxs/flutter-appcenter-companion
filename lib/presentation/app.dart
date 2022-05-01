@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appcenter_companion/presentation/home/home_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
@@ -44,7 +46,9 @@ class _AppState extends State<App> {
           ),
           builder: (context, child) {
             appTheme.setEffect(
-              flutter_acrylic.WindowEffect.transparent,
+              Platform.isMacOS
+                  ? flutter_acrylic.WindowEffect.transparent
+                  : flutter_acrylic.WindowEffect.acrylic,
               context,
               notify: false,
             );
@@ -53,7 +57,7 @@ class _AppState extends State<App> {
               child: NavigationPaneTheme(
                 data: NavigationPaneThemeData(
                   backgroundColor: appTheme.windowEffect !=
-                      flutter_acrylic.WindowEffect.disabled
+                          flutter_acrylic.WindowEffect.disabled
                       ? Colors.transparent
                       : null,
                 ),

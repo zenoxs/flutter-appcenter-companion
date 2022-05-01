@@ -51,8 +51,11 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setEffect(WindowEffect effect, BuildContext context,
-      {bool notify = true}) {
+  void setEffect(
+    WindowEffect effect,
+    BuildContext context, {
+    bool notify = true,
+  }) {
     Window.setEffect(
       effect: effect,
       color: [

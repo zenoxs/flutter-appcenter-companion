@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appcenter_companion/presentation/app_list/app_list_screen.dart';
 import 'package:appcenter_companion/presentation/home/authentication_dialog.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -46,9 +48,16 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
     final theme = FluentTheme.of(context);
     return NavigationView(
       key: viewKey,
-      appBar: const NavigationAppBar(
+      appBar: NavigationAppBar(
+        title: const DragToMoveArea(child: SizedBox.expand()),
         automaticallyImplyLeading: false,
         height: 30,
+        actions: Platform.isWindows
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [Spacer(), _WindowButtons()],
+              )
+            : null,
       ),
       pane: NavigationPane(
         selected: _selectedScreen,
@@ -128,8 +137,8 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
   }
 }
 
-class WindowButtons extends StatelessWidget {
-  const WindowButtons({Key? key}) : super(key: key);
+class _WindowButtons extends StatelessWidget {
+  const _WindowButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

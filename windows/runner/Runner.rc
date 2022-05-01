@@ -95,7 +95,7 @@ BEGIN
             VALUE "InternalName", "appcenter_companion" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "appcenter_companion.exe" "\0"
-            VALUE "ProductName", "appcenter_companion" "\0"
+            VALUE "ProductName", "AC Companion" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
