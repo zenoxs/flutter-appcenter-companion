@@ -26,28 +26,17 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter config --enable-macos-desktop
-      - run: flutter build macos
-      - name: Create dmg
+      - name: Install flutter_distributor
         run: |
-          brew install create-dmg
-          cd $MACOS_APP_RELEASE_PATH
-          create-dmg \
-            --volname "AC Companion" \
-            --window-pos 200 120 \
-            --window-size 800 529 \
-            --icon-size 130 \
-            --text-size 14 \
-            --icon "AC Companion.app" 260 250 \
-            --hide-extension "AC Companion.app" \
-            --app-drop-link 540 250 \
-            --hdiutil-quiet \
-            "AC Companion.dmg" \
-            "AC Companion.app"
-      - name: Upload macos dmg
+          dart pub global activate flutter_distributor
+          npm install -g appdmg
+      - name: Create dmg
+        run: flutter_distributor package --platform macos --targets dmg
+      - name: Upload MacOS artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ac_companion.dmg
-          path: "${{env.MACOS_APP_RELEASE_PATH}}/AC Companion.dmg"
+          name: ac_companion-macos
+          path: "dist/*.dmg"
   build-windows:
     runs-on: windows-latest
     env:
@@ -63,12 +52,15 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter config --enable-windows-desktop
-      - run: flutter build windows
-      - name: Upload windows exe
+      - name: Install flutter_distributor
+        run: dart pub global activate flutter_distributor
+      - name: Create msix
+        run: flutter_distributor package --platform windows --targets msix
+      - name: Upload windows artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ac_companion.exe
-          path: "${{env.WINDOWS_APP_RELEASE_PATH}}/ac_companion.exe"
+          name: ac_companion-windows
+          path: "dist/*.msix"
   release:
     name: Release
     needs: [build-macos, build-windows]
@@ -101,28 +93,26 @@ jobs:
       - name: Download dmg
         uses: actions/download-artifact@v3
         with:
-          name: ac_companion.dmg
-      - name: Upload Release Asset .dmg
+          name: ac_companion-macos
+      - name: Upload MacOS Asset
         id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "./AC Companion.dmg"
-          asset_name: "AC Companion.dmg"
+          asset_path: "./*.dmg"
           asset_content_type: application/octet-stream
       - name: Download exe
         uses: actions/download-artifact@v3
         with:
-          name: ac_companion.exe
-      - name: Upload Release Asset .exe
+          name: ac_companion-windows
+      - name: Upload Windows Asset
         id: upload-release-asset-windows
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "./ac_companion.exe"
-          asset_name: "ac_companion.exe"
+          asset_path: "./*.msix"
           asset_content_type: application/octet-stream
