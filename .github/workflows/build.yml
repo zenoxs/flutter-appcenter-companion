@@ -50,6 +50,8 @@ jobs:
           path: "${{env.MACOS_APP_RELEASE_PATH}}/AC Companion.dmg"
   build-windows:
     runs-on: windows-latest
+    env:
+      WINDOWS_APP_RELEASE_PATH: build/windows/runner/Release
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -62,6 +64,11 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
+      - name: Upload windows exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: ac_companion.exe
+          path: "${{env.WINDOWS_APP_RELEASE_PATH}}/ac_companion.exe"
   release:
     name: Release
     needs: [build-macos, build-windows]
@@ -96,7 +103,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload Release Asset .dmg
-        id: upload-release-asset
+        id: upload-release-asset-macos
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -104,4 +111,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: "./AC Companion.dmg"
           asset_name: "AC Companion.dmg"
+          asset_content_type: application/octet-stream
+      - name: Upload Release Asset .exe
+        id: upload-release-asset-windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "./ac_companion.exe"
+          asset_name: "ac_companion.exe"
           asset_content_type: application/octet-stream
