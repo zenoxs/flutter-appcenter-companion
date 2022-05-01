@@ -51,7 +51,8 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setEffect(WindowEffect effect, BuildContext context) {
+  void setEffect(WindowEffect effect, BuildContext context,
+      {bool notify = true}) {
     Window.setEffect(
       effect: effect,
       color: [
@@ -63,6 +64,7 @@ class AppTheme extends ChangeNotifier {
       dark: FluentTheme.of(context).brightness.isDark,
     );
     _windowEffect = effect;
+    if (notify) notifyListeners();
   }
 
   TextDirection _textDirection = TextDirection.ltr;

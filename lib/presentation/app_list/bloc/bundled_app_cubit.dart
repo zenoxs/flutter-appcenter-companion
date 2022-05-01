@@ -30,6 +30,8 @@ class BundledAppCubit extends Cubit<BundledAppState> {
   final BundledApplicationRepository _bundledApplicationRepository;
   late final StreamSubscription _bundledApplicationSubscription;
 
+  StreamSubscription<void>? refreshDataSubscription;
+
   void addBundledApp(String name, List<Branch> linkedBranches) {
     final bundledApplication = BundledApplication(name: name);
     for (final branch in linkedBranches) {
@@ -42,14 +44,18 @@ class BundledAppCubit extends Cubit<BundledAppState> {
 
   Future<void> refresh() async {
     emit(state.copyWith(loading: true));
-    _bundledApplicationRepository
+    refreshDataSubscription?.cancel();
+    refreshDataSubscription = _bundledApplicationRepository
         .refresh()
-        .whenComplete(() => emit(state.copyWith(loading: false)));
+        .whenComplete(() => emit(state.copyWith(loading: false)))
+        .asStream()
+        .listen((_) {});
   }
 
   @override
   Future<void> close() {
     _bundledApplicationSubscription.cancel();
+    refreshDataSubscription?.cancel();
     return super.close();
   }
 }

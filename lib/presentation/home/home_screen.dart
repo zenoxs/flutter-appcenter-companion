@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../settings/settings_screen.dart';
 import '../theme.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,11 +17,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WindowListener {
   final viewKey = GlobalKey();
-  final settingsController = ScrollController();
 
-  bool value = false;
-
-  int index = 0;
+  int _selectedScreen = 0;
+  late final List<Widget> _screens = [
+    AppListScreen(
+      onLogin: onLogin,
+    ),
+    Container(),
+    Container(),
+    const SettingsScreen(),
+  ];
 
   @override
   void initState() {
@@ -31,13 +37,13 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
   @override
   void dispose() {
     windowManager.removeListener(this);
-    settingsController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
+    final theme = FluentTheme.of(context);
     return NavigationView(
       key: viewKey,
       appBar: const NavigationAppBar(
@@ -45,8 +51,10 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         height: 30,
       ),
       pane: NavigationPane(
-        selected: index,
-        onChanged: (i) => setState(() => index = i),
+        selected: _selectedScreen,
+        onChanged: (i) => setState(() {
+          _selectedScreen = i;
+        }),
         size: const NavigationPaneSize(
           openMinWidth: 200,
           openMaxWidth: 280,
@@ -57,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Appcenter Companion',
+              'AC Companion',
               style: FluentTheme.of(context).typography.title!.copyWith(
                     fontSize:
                         appTheme.displayMode == PaneDisplayMode.top ? 20 : 22.0,
@@ -87,23 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
             title: const Text('Builds'),
           ),
           PaneItemSeparator(),
-          PaneItem(
-            icon: Icon(
-              appTheme.displayMode == PaneDisplayMode.top
-                  ? FluentIcons.more
-                  : FluentIcons.more_vertical,
-            ),
-            title: const Text('Others'),
-            infoBadge: const InfoBadge(
-              source: Text('9'),
-            ),
-          ),
         ],
-        autoSuggestBox: AutoSuggestBox(
-          controller: TextEditingController(),
-          items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-        ),
-        autoSuggestBoxReplacement: const Icon(FluentIcons.search),
         footerItems: [
           PaneItemSeparator(),
           _LinkPaneItemAction(
@@ -111,23 +103,19 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
             title: const Text('Login'),
             action: onLogin,
           ),
+          PaneItem(
+            icon: const Icon(FluentIcons.settings),
+            title: const Text('Settings'),
+          ),
         ],
       ),
-      content: NavigationBody(
-        index: index,
-        children: [
-          AppListScreen(
-            onLogin: onLogin,
-          ),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
-          Container(),
-        ],
+      content: Container(
+        color: theme.scaffoldBackgroundColor,
+        // TODO find a solution to keep animation and state widget state
+        child: IndexedStack(
+          index: _selectedScreen,
+          children: _screens,
+        ),
       ),
     );
   }

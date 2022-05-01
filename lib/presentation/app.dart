@@ -5,13 +5,18 @@ import 'package:provider/provider.dart';
 
 import 'theme.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final AppTheme appTheme = AppTheme();
+  State<App> createState() => _AppState();
+}
 
+class _AppState extends State<App> {
+  final AppTheme appTheme = AppTheme();
+
+  @override
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: appTheme,
       builder: (context, _) {
@@ -19,6 +24,7 @@ class App extends StatelessWidget {
         return FluentApp(
           title: 'Appcenter Companion',
           color: appTheme.color,
+          themeMode: appTheme.mode,
           home: const HomeScreen(),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
@@ -40,6 +46,7 @@ class App extends StatelessWidget {
             appTheme.setEffect(
               flutter_acrylic.WindowEffect.transparent,
               context,
+              notify: false,
             );
             return Directionality(
               textDirection: appTheme.textDirection,
