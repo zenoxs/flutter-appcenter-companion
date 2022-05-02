@@ -48,6 +48,8 @@ jobs:
       - run: flutter config --enable-linux-desktop
       - name: Install linux flutter sdk requirements
         run: sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - name: Install flutter secure storage requirements
+        run: sudo apt-get install libsecret-1-dev libjsoncpp-dev libsecret-1-0
       - name: Create deb
         run: flutter pub run flutter_distributor:main package --platform linux --targets deb
       - name: Upload Linux artifact
