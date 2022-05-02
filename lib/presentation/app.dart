@@ -46,9 +46,9 @@ class _AppState extends State<App> {
           ),
           builder: (context, child) {
             appTheme.setEffect(
-              Platform.isMacOS
-                  ? flutter_acrylic.WindowEffect.transparent
-                  : flutter_acrylic.WindowEffect.acrylic,
+              Platform.isWindows
+                  ? flutter_acrylic.WindowEffect.acrylic
+                  : flutter_acrylic.WindowEffect.disabled,
               context,
               notify: false,
             );

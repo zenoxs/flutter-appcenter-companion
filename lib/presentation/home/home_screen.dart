@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with WindowListener {
         title: const DragToMoveArea(child: SizedBox.expand()),
         automaticallyImplyLeading: false,
         height: 30,
-        actions: Platform.isWindows
+        actions: (Platform.isWindows || Platform.isLinux)
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [Spacer(), _WindowButtons()],
