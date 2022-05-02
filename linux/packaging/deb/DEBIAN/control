@@ -1,0 +1,8 @@
+Section: x11
+Priority: optional
+Maintainer: Amaury CIVIER
+Version: 1.0.0
+Homepage: https://github.com/zenoxs/appcenter-companion
+Package: appcenter-companion
+Architecture: amd64
+Description: A companion app to help manage your applications on appcenter.

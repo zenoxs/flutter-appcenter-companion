@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0.0
+Type=Application
+Name=appcenter-companion
+Icon=appcenter_companion
+Exec=appcenter_companion %U
+Categories=Utility;
+Keywords=AppCenter;
