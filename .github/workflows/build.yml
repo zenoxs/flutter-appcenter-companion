@@ -26,12 +26,10 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter config --enable-macos-desktop
-      - name: Install flutter_distributor
-        run: |
-          dart pub global activate flutter_distributor
-          npm install -g appdmg
+      - name: Install app dmg
+        run: npm install -g appdmg
       - name: Create dmg
-        run: dart pub global run flutter_distributor:main package --platform macos --targets dmg
+        run: flutter pub run flutter_distributor:main package --platform macos --targets dmg
       - name: Upload MacOS artifact
         uses: actions/upload-artifact@v3
         with:
@@ -52,10 +50,8 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter config --enable-windows-desktop
-      - name: Install flutter_distributor
-        run: dart pub global activate flutter_distributor
       - name: Create msix
-        run: dart pub global run flutter_distributor:main package --platform windows --targets msix
+        run: flutter pub run flutter_distributor:main package --platform windows --targets msix
       - name: Upload windows artifact
         uses: actions/upload-artifact@v3
         with:
