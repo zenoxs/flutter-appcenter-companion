@@ -26,7 +26,7 @@ class _AppState extends State<App> {
         return FluentApp(
           title: 'Appcenter Companion',
           color: appTheme.color,
-          themeMode: appTheme.mode,
+          themeMode: ThemeMode.dark,
           home: const HomeScreen(),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
@@ -48,7 +48,7 @@ class _AppState extends State<App> {
             appTheme.setEffect(
               Platform.isWindows
                   ? flutter_acrylic.WindowEffect.acrylic
-                  : flutter_acrylic.WindowEffect.disabled,
+                  : flutter_acrylic.WindowEffect.transparent,
               context,
               notify: false,
             );

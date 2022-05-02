@@ -115,6 +115,20 @@ jobs:
           asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-macos.dmg"
           asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-macos.dmg"
           asset_content_type: application/octet-stream
+      - name: Download deb
+        uses: actions/download-artifact@v3
+        with:
+          name: ac_companion-linux
+      - name: Upload Linux Asset
+        id: upload-release-asset-linux
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-linux.deb"
+          asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-linux.deb"
+          asset_content_type: application/octet-stream
       - name: Download exe
         uses: actions/download-artifact@v3
         with:
