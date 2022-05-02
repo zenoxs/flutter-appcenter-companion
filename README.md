@@ -1,3 +1,4 @@
+[![build](https://github.com/zenoxs/appcenter-companion/actions/workflows/build.yml/badge.svg)](https://github.com/zenoxs/appcenter-companion/actions/workflows/build.yml)
 # AppCenter Companion
 
 A companion app to help manage your applications on appcenter.

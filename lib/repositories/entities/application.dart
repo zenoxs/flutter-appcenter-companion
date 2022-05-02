@@ -19,6 +19,7 @@ class Application extends RemoteObject {
 
   final owner = ToOne<Owner>();
 
+  @Transient()
   Os os;
 
   int get dbOs {
@@ -29,6 +30,7 @@ class Application extends RemoteObject {
     os = Os.values[value];
   }
 
+  @Transient()
   Platform platform;
 
   int get dbPlatform {

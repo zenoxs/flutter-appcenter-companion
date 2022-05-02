@@ -16,7 +16,7 @@ String branchDtoToJson(List<BranchDto> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @freezed
-abstract class BranchDto with _$BranchDto {
+class BranchDto with _$BranchDto {
   @JsonSerializable(fieldRename: FieldRename.none)
   const factory BranchDto(
     BranchValueDto branch,
@@ -30,9 +30,11 @@ abstract class BranchDto with _$BranchDto {
 }
 
 @freezed
-abstract class BranchValueDto with _$BranchValueDto {
-  const factory BranchValueDto(String name,
-      BranchCommitDto commit,) = _BranchValueDto;
+class BranchValueDto with _$BranchValueDto {
+  const factory BranchValueDto(
+    String name,
+    BranchCommitDto commit,
+  ) = _BranchValueDto;
 
   factory BranchValueDto.fromJson(Map<String, dynamic> json) =>
       _$BranchValueDtoFromJson(json);

@@ -1,7 +1,6 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/build_dto.dart';
 import 'package:collection/collection.dart';
-
 // ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
 
@@ -14,14 +13,19 @@ class Build {
   int id;
   final int buildId;
   final String buildNumber;
+  @Property(type: PropertyType.date)
   final DateTime queueTime;
+  @Property(type: PropertyType.date)
   final DateTime? startTime;
+  @Property(type: PropertyType.date)
   final DateTime? finishTime;
+  @Property(type: PropertyType.date)
   final DateTime lastChangedDate;
   final String sourceVersion;
 
   final sourceBranch = ToOne<Branch>();
 
+  @Transient()
   BuildStatus status;
 
   int get dbStatus {
@@ -32,6 +36,7 @@ class Build {
     status = BuildStatus.values[value];
   }
 
+  @Transient()
   BuildResult? result;
 
   int? get dbResult {
