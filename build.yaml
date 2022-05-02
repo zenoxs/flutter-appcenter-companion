@@ -2,5 +2,8 @@ targets:
   $default:
     builders:
       json_serializable:
+        enabled: true
         options:
           field_rename: snake
+      freezed|freezed:
+        enabled: true

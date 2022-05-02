@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ac_companion-macos
-          path: "dist/*.dmg"
+          path: "dist/**/*.dmg"
   build-windows:
     runs-on: windows-latest
     env:
@@ -56,7 +56,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ac_companion-windows
-          path: "dist/*.msix"
+          path: "dist/**/*.msix"
   release:
     name: Release
     needs: [build-macos, build-windows]

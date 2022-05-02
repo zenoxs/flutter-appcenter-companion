@@ -589,14 +589,14 @@ packages:
     source: hosted
     version: "4.4.0"
   json_serializable:
-    dependency: "direct overridden"
+    dependency: "direct dev"
     description:
       name: json_serializable
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.6"
   lint:
-    dependency: "direct overridden"
+    dependency: "direct dev"
     description:
       name: lint
       url: "https://pub.dartlang.org"
@@ -652,7 +652,7 @@ packages:
     source: hosted
     version: "1.0.1"
   msix:
-    dependency: "direct overridden"
+    dependency: "direct dev"
     description:
       name: msix
       url: "https://pub.dartlang.org"
