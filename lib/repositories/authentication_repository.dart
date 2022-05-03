@@ -9,7 +9,6 @@ import 'package:rxdart/rxdart.dart';
 import 'storage_repository.dart';
 
 part 'authentication_repository.freezed.dart';
-
 part 'authentication_repository.g.dart';
 
 @Freezed(unionKey: 'type', unionValueCase: FreezedUnionCase.none)
@@ -36,6 +35,12 @@ enum AuthenticationAccess {
 extension AuthenticationHelpers on AuthenticationState {
   bool get isConnected {
     return this is AuthenticationStateAuthenticated;
+  }
+
+  bool get isFullAccess {
+    return this is AuthenticationStateAuthenticated &&
+        (this as AuthenticationStateAuthenticated).access ==
+            AuthenticationAccess.fullAccess;
   }
 }
 

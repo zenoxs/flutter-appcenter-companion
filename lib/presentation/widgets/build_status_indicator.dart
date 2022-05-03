@@ -44,14 +44,14 @@ class BuildStatusIndicator extends StatelessWidget {
       icon = FluentIcons.blocked2_solid;
     }
 
-    final iconWidget = Icon(
+    Widget iconWidget = Icon(
       icon,
       color: color,
       size: size,
     );
 
     if (status == BuildStatus.inProgress) {
-      return LoopAnimation(
+      iconWidget = LoopAnimation(
         builder: (context, child, double value) {
           return Transform.rotate(
             angle: pi * value,
@@ -62,6 +62,9 @@ class BuildStatusIndicator extends StatelessWidget {
         tween: Tween<double>(begin: 0, end: 2),
       );
     }
-    return iconWidget;
+    return Tooltip(
+      message: 'Status: ${status.name} \n Result: ${result.name}',
+      child: iconWidget,
+    );
   }
 }

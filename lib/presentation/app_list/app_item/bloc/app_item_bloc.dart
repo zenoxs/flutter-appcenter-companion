@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:appcenter_companion/objectbox.g.dart';
+import 'package:appcenter_companion/repositories/dto/build_dto.dart';
 import 'package:appcenter_companion/repositories/entities/entities.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'app_item_bloc.freezed.dart';
-
 part 'app_item_event.dart';
-
 part 'app_item_state.dart';
 
 class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
@@ -21,7 +20,9 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
         super(
           AppItemState(
             bundledApplication:
-                store.box<BundledApplication>().get(bundledApplicationId)!,
+            store.box<BundledApplication>().get(bundledApplicationId)!,
+            status: _buildStatus(store, bundledApplicationId),
+            result: _buildResult(store, bundledApplicationId),
           ),
         ) {
     on<AppItemEventUpdated>(
@@ -121,18 +122,90 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
         .distinct()
         .doOnData(
           (_) => add(AppItemEvent.updated()),
-        ) //
+    ) //
         .listen((_) => _onBundledAppChanged());
 
     _onBundledAppChanged();
+  }
+
+  static BuildResult _buildResult(Store store, int bundledApplicationId) {
+    final bundledApp =
+    store.box<BundledApplication>().get(bundledApplicationId)!;
+
+    if (bundledApp.linkedApplications.any(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.result ==
+          BuildResult.failed,
+    )) {
+      return BuildResult.failed;
+    }
+
+    if (bundledApp.linkedApplications.every(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.result ==
+          BuildResult.succeeded,
+    )) {
+      return BuildResult.succeeded;
+    }
+
+    if (bundledApp.linkedApplications.every(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.result ==
+          BuildResult.canceled,
+    )) {
+      return BuildResult.canceled;
+    }
+
+    return BuildResult.unknown;
+  }
+
+  static BuildStatus _buildStatus(Store store, int bundledApplicationId) {
+    final bundledApp =
+    store.box<BundledApplication>().get(bundledApplicationId)!;
+
+    if (bundledApp.linkedApplications.any(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.status ==
+          BuildStatus.inProgress,
+    )) {
+      return BuildStatus.inProgress;
+    }
+
+    if (bundledApp.linkedApplications.any(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.status ==
+          BuildStatus.notStarted,
+    )) {
+      return BuildStatus.notStarted;
+    }
+
+    if (bundledApp.linkedApplications.any(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.status ==
+          BuildStatus.cancelling,
+    )) {
+      return BuildStatus.cancelling;
+    }
+
+    if (bundledApp.linkedApplications.every(
+          (linkedApp) =>
+      linkedApp.branch.target!.lastBuild.target?.status ==
+          BuildStatus.completed,
+    )) {
+      return BuildStatus.completed;
+    }
+
+    return BuildStatus.unknown;
   }
 
   void _onBundledApplicationUpdated(Emitter<AppItemState> emit) {
     emit(
       state.copyWith(
         bundledApplication: _store.box<BundledApplication>().get(
-              _bundledApplicationId,
-            )!,
+          _bundledApplicationId,
+        )!,
+        status: _buildStatus(_store, _bundledApplicationId),
+        result: _buildResult(_store, _bundledApplicationId),
       ),
     );
   }
