@@ -11,6 +11,7 @@ class AuthenticationDialog extends StatefulWidget {
 
 class _AuthenticationDialogState extends State<AuthenticationDialog> {
   final TextEditingController _tokenController = TextEditingController();
+  AuthenticationAccess _accessValue = AuthenticationAccess.readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,29 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
             placeholder: 'xaprjx4nyuu78w....',
           ),
           const SizedBox(height: 16),
+          InfoLabel(
+            label: 'Access',
+            child: Wrap(
+              spacing: 6,
+              direction: Axis.vertical,
+              children: AuthenticationAccess.values
+                  .map(
+                    (value) => RadioButton(
+                      content: Text(value.name),
+                      onChanged: (_) {
+                        setState(() {
+                          _accessValue = value;
+                        });
+                      },
+                      checked: value == _accessValue,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Divider(),
+          const SizedBox(height: 10),
           StreamBuilder(
             stream: context.read<AuthenticationRepository>().stream,
             builder: (context, AsyncSnapshot<AuthenticationState> snapshot) {
@@ -39,8 +63,38 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
                     orElse: () => null,
                   ) ??
                   '<none>';
-              return SelectableText(
-                'Current token: $token',
+              final access = snapshot.data?.maybeWhen(
+                    authenticated: (token, access) => access.name,
+                    orElse: () => null,
+                  ) ??
+                  '<none>';
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InfoLabel(
+                    label: 'Current access',
+                    labelStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                    child: Text(
+                      access,
+                      style: FluentTheme.of(context).typography.caption,
+                    ),
+                  ),
+                  InfoLabel(
+                    label: 'Current token',
+                    labelStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                    child: SelectableText(
+                      token,
+                      style: FluentTheme.of(context).typography.caption,
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -52,7 +106,7 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
           onPressed: () {
             context
                 .read<AuthenticationRepository>()
-                .login(_tokenController.text);
+                .login(_tokenController.text, access: _accessValue);
           },
         ),
         Button(

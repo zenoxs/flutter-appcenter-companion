@@ -15,7 +15,7 @@ part 'authentication_repository.g.dart';
 class AuthenticationState with _$AuthenticationState {
   const factory AuthenticationState.authenticated({
     required String token,
-    @Default(AuthenticationAccess.readOnly) AuthenticationAccess? access,
+    @Default(AuthenticationAccess.readOnly) AuthenticationAccess access,
   }) = AuthenticationStateAuthenticated;
 
   const factory AuthenticationState.unauthenticated() =
@@ -80,7 +80,7 @@ class AuthenticationRepository {
       _authController.add(
         AuthenticationState.authenticated(
           token: token,
-          access: access,
+          access: access ?? AuthenticationAccess.readOnly,
         ),
       );
     }
