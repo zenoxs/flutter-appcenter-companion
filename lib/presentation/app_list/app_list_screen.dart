@@ -1,5 +1,5 @@
 import 'package:appcenter_companion/presentation/app_list/add_bundled_app/add_bundled_app_dialog.dart';
-import 'package:appcenter_companion/presentation/app_list/app_item.dart';
+import 'package:appcenter_companion/presentation/app_list/app_item/app_item.dart';
 import 'package:appcenter_companion/repositories/authentication_repository.dart';
 import 'package:appcenter_companion/repositories/bundled_application_repository.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -75,7 +75,7 @@ class AppListScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemBuilder: (context, index) {
                       final bundledApp = state.bundledApplications[index];
-                      return AppItem(bundledApplication: bundledApp);
+                      return AppItem(bundledApplicationId: bundledApp.id);
                     },
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),

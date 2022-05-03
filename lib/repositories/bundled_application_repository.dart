@@ -41,15 +41,18 @@ class BundledApplicationRepository {
   late final Box<BundledApplication> _box;
   final List<AppWebSocketChannel> _applicationWSChannels = [];
 
+  Box<BundledApplication> get box => _box;
+
   Stream<Query<BundledApplication>> get bundledApplications {
     // trigger the stream depends on relation too
-    return Rx.combineLatest3(
-        _box.query().watch(triggerImmediately: true),
-        _store.box<Application>().query().watch(triggerImmediately: true),
-        _store.box<Branch>().query().watch(triggerImmediately: true),
-        (Query<BundledApplication> bundleAppleQuery, _, __) {
-      return bundleAppleQuery;
-    });
+    // return Rx.combineLatest3(
+    //     _box.query().watch(triggerImmediately: true),
+    //     _store.box<Application>().query().watch(triggerImmediately: true),
+    //     _store.box<Branch>().query().watch(triggerImmediately: true),
+    //     (Query<BundledApplication> bundleAppleQuery, _, __) {
+    //   return bundleAppleQuery;
+    // });
+    return _box.query().watch(triggerImmediately: true);
   }
 
   void _disconnectAllWebSocket() {

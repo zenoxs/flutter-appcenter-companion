@@ -26,7 +26,7 @@ class _AppState extends State<App> {
         return FluentApp(
           title: 'Appcenter Companion',
           color: appTheme.color,
-          themeMode: ThemeMode.dark,
+          themeMode: appTheme.mode,
           home: const HomeScreen(),
           darkTheme: ThemeData(
             brightness: Brightness.dark,

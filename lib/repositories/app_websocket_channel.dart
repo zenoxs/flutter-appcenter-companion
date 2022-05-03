@@ -39,6 +39,10 @@ class AppWebSocketChannel {
         debugPrint('ws ${_application.name} done');
       },
     );
+    const timeout = Duration(seconds: 45);
+    _heartbeatTimer = Timer.periodic(timeout, (timer) {
+      _channel.sink.add(jsonEncode(const WsHeartBeat().toJson()));
+    });
     _method(const WsMethod.watchRepo());
   }
 
@@ -46,6 +50,7 @@ class AppWebSocketChannel {
   late final WebSocketChannel _channel;
   late final StreamSubscription _channelSubscription;
   final _subscribedBuildIds = <int>{};
+  late final Timer _heartbeatTimer;
   final _eventController = StreamController<WsAppEvent>();
 
   Application get _application =>
@@ -74,6 +79,7 @@ class AppWebSocketChannel {
   }
 
   void close() {
+    _heartbeatTimer.cancel();
     _channelSubscription.cancel();
     _eventController.close();
     _channel.sink.close();

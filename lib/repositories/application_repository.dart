@@ -22,7 +22,8 @@ class ApplicationRepository {
   late final Box<Application> _box;
 
   Stream<Query<Application>> get applications {
-    return _box.query().watch(triggerImmediately: true);
+    return (_box.query()..order(Application_.name))
+        .watch(triggerImmediately: true);
   }
 
   Future<Application> fetchAppWithBranches(Application application) async {

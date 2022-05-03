@@ -74,6 +74,7 @@ Future<void> main() async {
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: environment),
+        RepositoryProvider.value(value: store),
         RepositoryProvider.value(value: authenticationRepository),
         RepositoryProvider.value(value: appcenterHttp),
         RepositoryProvider.value(value: applicationRepository),
