@@ -5,7 +5,7 @@ import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AppItem extends StatelessWidget {
+class AppItem extends StatefulWidget {
   final int bundledApplicationId;
 
   const AppItem({
@@ -14,12 +14,21 @@ class AppItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AppItem> createState() => _AppItemState();
+}
+
+class _AppItemState extends State<AppItem> {
+  final _moreController = FlyoutController();
+  late final _bloc = AppItemBloc(
+    bundledApplicationId: widget.bundledApplicationId,
+    bundledApplicationRepository: context.read<BundledApplicationRepository>(),
+    store: context.read<Store>(),
+  );
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppItemBloc(
-        bundledApplicationId: bundledApplicationId,
-        store: context.read<Store>(),
-      ),
+    return BlocProvider.value(
+      value: _bloc,
       child: BlocBuilder<AppItemBloc, AppItemState>(
         builder: (context, state) {
           final bundledApplication = state.bundledApplication;
@@ -31,11 +40,11 @@ class AppItem extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 ...bundledApplication.linkedApplications.map(
-                  (linkedApp) => Text(
+                      (linkedApp) => Text(
                     linkedApp.branch.target!.application.target!.name,
                     style: FluentTheme.of(context).typography.body!.copyWith(
-                          color: FluentTheme.of(context).accentColor.normal,
-                        ),
+                      color: FluentTheme.of(context).accentColor.normal,
+                    ),
                   ),
                 ),
                 StreamBuilder<AuthenticationState>(
@@ -51,9 +60,10 @@ class AppItem extends StatelessWidget {
                             size: 16,
                           ),
                           onPressed: snapshot.data?.isFullAccess == true
-                              ? () => context
+                              ? () =>
+                              context
                                   .read<AppItemBloc>()
-                                  .add(AppItemEvent.cancelAllBuild())
+                                  .add(AppItemEvent.cancelAllBuildRequested())
                               : null,
                         ),
                       );
@@ -68,12 +78,45 @@ class AppItem extends StatelessWidget {
                         onPressed: snapshot.data?.isFullAccess == true
                             ? () => context
                                 .read<AppItemBloc>()
-                                .add(AppItemEvent.buildAll())
+                                .add(AppItemEvent.buildAllRequested())
                             : null,
                       ),
                     );
                   },
-                )
+                ),
+                Flyout(
+                    controller: _moreController,
+                    content: (context) {
+                      return MenuFlyout(
+                        items: [
+                          MenuFlyoutItem(
+                            leading: const Icon(FluentIcons.delete),
+                            text: const Text('Remove'),
+                            onPressed: () {
+                              _moreController.close();
+                              _onRemove(state.bundledApplication);
+                            },
+                          ),
+                          MenuFlyoutItem(
+                            leading: const Icon(FluentIcons.edit),
+                            text: const Text('Edit'),
+                            onPressed: () {
+                              _moreController.close();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                    child: IconButton(
+                      icon: const Icon(FluentIcons.more),
+                      onPressed: () {
+                        _moreController.open();
+                      },
+                    )),
+                const Divider(
+                  direction: Axis.vertical,
+                  size: 27,
+                ),
               ],
             ),
             header: Wrap(
@@ -90,8 +133,8 @@ class AppItem extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   child: bundledApplication.iconUrl != null
                       ? Image.network(
-                          bundledApplication.iconUrl!,
-                        )
+                    bundledApplication.iconUrl!,
+                  )
                       : null,
                 ),
                 Text(
@@ -108,7 +151,7 @@ class AppItem extends StatelessWidget {
               spacing: 10,
               children: [
                 ...bundledApplication.linkedApplications.map(
-                  (linkedApp) {
+                      (linkedApp) {
                     final branch = linkedApp.branch.target;
                     final lastBuild = branch?.lastBuild.target;
                     final application = branch?.application.target;
@@ -126,10 +169,8 @@ class AppItem extends StatelessWidget {
                       ),
                       trailing: StreamBuilder<AuthenticationState>(
                         stream: context.read<AuthenticationRepository>().stream,
-                        builder: (
-                          context,
-                          AsyncSnapshot<AuthenticationState> snapshot,
-                        ) {
+                        builder: (context,
+                            AsyncSnapshot<AuthenticationState> snapshot,) {
                           if (lastBuild?.status == BuildStatus.inProgress) {
                             return Tooltip(
                               message: 'Cancel ${application?.displayName}',
@@ -139,9 +180,8 @@ class AppItem extends StatelessWidget {
                                   size: 16,
                                 ),
                                 onPressed: snapshot.data?.isFullAccess == true
-                                    ? () => context
-                                        .read<AppItemBloc>()
-                                        .add(AppItemEvent.cancelAllBuild())
+                                    ? () => context.read<AppItemBloc>().add(
+                                        AppItemEvent.cancelAllBuildRequested())
                                     : null,
                               ),
                             );
@@ -154,9 +194,10 @@ class AppItem extends StatelessWidget {
                                 size: 16,
                               ),
                               onPressed: snapshot.data?.isFullAccess == true
-                                  ? () => context
+                                  ? () =>
+                                  context
                                       .read<AppItemBloc>()
-                                      .add(AppItemEvent.buildAll())
+                                      .add(AppItemEvent.buildAllRequested())
                                   : null,
                             ),
                           );
@@ -170,6 +211,36 @@ class AppItem extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  void _onRemove(BundledApplication bundledApplication) {
+    showDialog(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(
+          'Remove ${bundledApplication.name} permanently?',
+          style: FluentTheme.of(context).typography.subtitle,
+        ),
+        content: Text(
+          'Are you sure you want to remove ${bundledApplication.name}?',
+        ),
+        actions: [
+          Button(
+            child: const Text('Remove'),
+            onPressed: () {
+              _bloc.add(AppItemEvent.removeRequested());
+              Navigator.pop(context);
+            },
+          ),
+          Button(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }

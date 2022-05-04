@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/build_dto.dart';
 import 'package:appcenter_companion/repositories/entities/entities.dart';
+import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,13 +15,16 @@ part 'app_item_state.dart';
 class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
   AppItemBloc({
     required int bundledApplicationId,
+    required BundledApplicationRepository bundledApplicationRepository,
     required Store store,
-  })  : _store = store,
+  })
+      : _store = store,
         _bundledApplicationId = bundledApplicationId,
+        _bundledApplicationRepository = bundledApplicationRepository,
         super(
           AppItemState(
             bundledApplication:
-            store.box<BundledApplication>().get(bundledApplicationId)!,
+                store.box<BundledApplication>().get(bundledApplicationId)!,
             status: _buildStatus(store, bundledApplicationId),
             result: _buildResult(store, bundledApplicationId),
           ),
@@ -32,10 +36,15 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
           .switchMap(mapper),
     );
 
+    on<AppItemEventRemoveRequested>(
+      (event, emit) => _onRemoveRequested(emit),
+    );
+
     _setupListeners();
   }
 
   final int _bundledApplicationId;
+  final BundledApplicationRepository _bundledApplicationRepository;
   final Store _store;
   late final StreamSubscription _bundledApplicationSubscription;
   final Map<String, List<StreamSubscription>> _subscriptions = {};
@@ -122,7 +131,7 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
         .distinct()
         .doOnData(
           (_) => add(AppItemEvent.updated()),
-    ) //
+        ) //
         .listen((_) => _onBundledAppChanged());
 
     _onBundledAppChanged();
@@ -130,27 +139,27 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
 
   static BuildResult _buildResult(Store store, int bundledApplicationId) {
     final bundledApp =
-    store.box<BundledApplication>().get(bundledApplicationId)!;
+        store.box<BundledApplication>().get(bundledApplicationId)!;
 
     if (bundledApp.linkedApplications.any(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.result ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.result ==
           BuildResult.failed,
     )) {
       return BuildResult.failed;
     }
 
     if (bundledApp.linkedApplications.every(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.result ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.result ==
           BuildResult.succeeded,
     )) {
       return BuildResult.succeeded;
     }
 
     if (bundledApp.linkedApplications.every(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.result ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.result ==
           BuildResult.canceled,
     )) {
       return BuildResult.canceled;
@@ -161,35 +170,35 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
 
   static BuildStatus _buildStatus(Store store, int bundledApplicationId) {
     final bundledApp =
-    store.box<BundledApplication>().get(bundledApplicationId)!;
+        store.box<BundledApplication>().get(bundledApplicationId)!;
 
     if (bundledApp.linkedApplications.any(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.status ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.status ==
           BuildStatus.inProgress,
     )) {
       return BuildStatus.inProgress;
     }
 
     if (bundledApp.linkedApplications.any(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.status ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.status ==
           BuildStatus.notStarted,
     )) {
       return BuildStatus.notStarted;
     }
 
     if (bundledApp.linkedApplications.any(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.status ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.status ==
           BuildStatus.cancelling,
     )) {
       return BuildStatus.cancelling;
     }
 
     if (bundledApp.linkedApplications.every(
-          (linkedApp) =>
-      linkedApp.branch.target!.lastBuild.target?.status ==
+      (linkedApp) =>
+          linkedApp.branch.target!.lastBuild.target?.status ==
           BuildStatus.completed,
     )) {
       return BuildStatus.completed;
@@ -202,11 +211,17 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
     emit(
       state.copyWith(
         bundledApplication: _store.box<BundledApplication>().get(
-          _bundledApplicationId,
-        )!,
+              _bundledApplicationId,
+            )!,
         status: _buildStatus(_store, _bundledApplicationId),
         result: _buildResult(_store, _bundledApplicationId),
       ),
+    );
+  }
+
+  void _onRemoveRequested(Emitter<AppItemState> emit) {
+    _bundledApplicationRepository.removeBundledApplication(
+      _bundledApplicationId,
     );
   }
 

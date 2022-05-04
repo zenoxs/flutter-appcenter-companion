@@ -86,17 +86,21 @@ class _AddBundledAppDialogState extends State<AddBundledAppDialog> {
           ],
         ),
         actions: [
-          FilledButton(
-            onPressed: _addBundledAppCubit.state.linkedBranches.isNotEmpty
-                ? () {
-                    context.read<BundledAppCubit>().addBundledApp(
-                          _nameController.text,
-                          _addBundledAppCubit.state.linkedBranches,
-                        );
-                    Navigator.pop(context);
-                  }
-                : null,
-            child: const Text('Add'),
+          BlocBuilder<AddBundledAppCubit, AddBundledAppState>(
+            builder: (context, state) {
+              return FilledButton(
+                onPressed: state.linkedBranches.isNotEmpty
+                    ? () {
+                        context.read<BundledAppCubit>().addBundledApp(
+                              _nameController.text,
+                              state.linkedBranches,
+                            );
+                        Navigator.pop(context);
+                      }
+                    : null,
+                child: const Text('Add'),
+              );
+            },
           ),
           Button(
             child: const Text('Cancel'),

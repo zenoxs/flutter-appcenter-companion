@@ -111,4 +111,8 @@ class BundledApplicationRepository {
   ) async {
     _box.put(bundledApplication);
   }
+
+  void removeBundledApplication(int bundledApplicationId) {
+    _box.remove(bundledApplicationId);
+  }
 }

@@ -4,7 +4,10 @@ part of 'app_item_bloc.dart';
 class AppItemEvent with _$AppItemEvent {
   factory AppItemEvent.updated() = AppItemEventUpdated;
 
-  factory AppItemEvent.buildAll() = AppItemEventBuildAll;
+  factory AppItemEvent.removeRequested() = AppItemEventRemoveRequested;
 
-  factory AppItemEvent.cancelAllBuild() = AppItemEventCancelAllBuild;
+  factory AppItemEvent.buildAllRequested() = AppItemEventBuildAllRequested;
+
+  factory AppItemEvent.cancelAllBuildRequested() =
+      AppItemEventCancelAllBuildRequested;
 }
