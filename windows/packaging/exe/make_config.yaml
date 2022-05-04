@@ -1,0 +1,8 @@
+app_id: 22e47568-62d0-421f-a41d-72107b54ff4d
+publisher: Amaury CIVIER
+publisher_url: https://github.com/zenoxs/appcenter-companion
+display_name: AC Companion
+create_desktop_icon: true
+install_dir_name: appcenter-companion
+locales:
+  - en

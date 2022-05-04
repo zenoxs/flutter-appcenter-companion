@@ -67,12 +67,14 @@ jobs:
       - name: Install flutter secure storage requirements
         run: sudo apt-get install libsecret-1-dev libjsoncpp-dev libsecret-1-0
       - name: Create deb
-        run: flutter pub run flutter_distributor:main package --platform linux --targets deb
+        run: flutter pub run flutter_distributor:main package --platform linux --targets deb,zip
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v3
         with:
           name: ac_companion-linux
-          path: "dist/**/*.deb"
+          path: |
+            "dist/**/*.deb"
+            "dist/**/*.zip"
   build-windows:
     needs: [ analyze-test ]
     runs-on: windows-latest
@@ -88,14 +90,15 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter config --enable-windows-desktop
       - name: Create msix
-        run: flutter pub run flutter_distributor:main package --platform windows --targets msix
+        run: flutter pub run flutter_distributor:main package --platform windows --targets msix,exe
       - name: Upload windows artifact
         uses: actions/upload-artifact@v3
         with:
           name: ac_companion-windows
-          path: "dist/**/*.msix"
+          path: |
+            "dist/**/*.msix"
+            "dist/**/*.exe"
   release:
-    name: Release
     needs: [build-macos, build-windows, build-linux]
     runs-on: ubuntu-latest
     steps:
@@ -115,15 +118,15 @@ jobs:
           tag_name: ${{ steps.versions.outputs.version }}
           release_name: Release ${{ steps.versions.outputs.version }}
           body: |
-             Release Notes
+            Release Notes
           draft: false
           prerelease: false
-      - name: Download dmg
+      - name: Download MacOS assets
         uses: actions/download-artifact@v3
         with:
           name: ac_companion-macos
-      - name: Upload MacOS Asset
-        id: upload-release-asset-macos
+      - name: Upload MacOS dmg
+        id: upload-release-macos-dmg
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -132,12 +135,12 @@ jobs:
           asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-macos.dmg"
           asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-macos.dmg"
           asset_content_type: application/octet-stream
-      - name: Download deb
+      - name: Download Linux assets
         uses: actions/download-artifact@v3
         with:
           name: ac_companion-linux
-      - name: Upload Linux Asset
-        id: upload-release-asset-linux
+      - name: Upload Linux deb
+        id: upload-asset-linux-deb
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -146,12 +149,22 @@ jobs:
           asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-linux_deb.deb"
           asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-linux.deb"
           asset_content_type: application/octet-stream
-      - name: Download exe
+      - name: Upload Linux zip
+        id: upload-release-linux-zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-linux_zip.zip"
+          asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-linux.zip"
+          asset_content_type: application/octet-stream
+      - name: Download Windows assets
         uses: actions/download-artifact@v3
         with:
           name: ac_companion-windows
-      - name: Upload Windows Asset
-        id: upload-release-asset-windows
+      - name: Upload Windows msix
+        id: upload-release-windows-msix
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -159,4 +172,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-windows.msix"
           asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-windows.msix"
+          asset_content_type: application/octet-stream
+      - name: Upload Windows exe
+        id: upload-release-windows-exe
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-windows.exe"
+          asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-windows.exe"
           asset_content_type: application/octet-stream
