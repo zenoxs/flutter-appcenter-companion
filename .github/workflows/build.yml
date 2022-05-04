@@ -157,7 +157,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-linux_zip.zip"
+          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-linux.zip"
           asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-linux.zip"
           asset_content_type: application/octet-stream
       - name: Download Windows assets
