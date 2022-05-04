@@ -181,6 +181,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-windows.exe"
-          asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-windows.exe"
+          asset_path: "./${{ steps.versions.outputs.version }}/appcenter_companion-${{ steps.versions.outputs.version }}-windows-setup.exe"
+          asset_name: "appcenter_companion-${{ steps.versions.outputs.version }}-windows-setup.exe"
           asset_content_type: application/octet-stream
