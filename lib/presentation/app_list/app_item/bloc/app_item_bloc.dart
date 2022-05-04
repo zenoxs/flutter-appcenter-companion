@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:appcenter_companion/objectbox.g.dart';
-import 'package:appcenter_companion/repositories/dto/build_dto.dart';
-import 'package:appcenter_companion/repositories/entities/entities.dart';
 import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,8 +15,7 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
     required int bundledApplicationId,
     required BundledApplicationRepository bundledApplicationRepository,
     required Store store,
-  })
-      : _store = store,
+  })  : _store = store,
         _bundledApplicationId = bundledApplicationId,
         _bundledApplicationRepository = bundledApplicationRepository,
         super(

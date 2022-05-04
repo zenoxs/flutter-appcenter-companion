@@ -40,11 +40,11 @@ class _AppItemState extends State<AppItem> {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 ...bundledApplication.linkedApplications.map(
-                      (linkedApp) => Text(
+                  (linkedApp) => Text(
                     linkedApp.branch.target!.application.target!.name,
                     style: FluentTheme.of(context).typography.body!.copyWith(
-                      color: FluentTheme.of(context).accentColor.normal,
-                    ),
+                          color: FluentTheme.of(context).accentColor.normal,
+                        ),
                   ),
                 ),
                 StreamBuilder<AuthenticationState>(
@@ -60,8 +60,7 @@ class _AppItemState extends State<AppItem> {
                             size: 16,
                           ),
                           onPressed: snapshot.data?.isFullAccess == true
-                              ? () =>
-                              context
+                              ? () => context
                                   .read<AppItemBloc>()
                                   .add(AppItemEvent.cancelAllBuildRequested())
                               : null,
@@ -85,34 +84,35 @@ class _AppItemState extends State<AppItem> {
                   },
                 ),
                 Flyout(
-                    controller: _moreController,
-                    content: (context) {
-                      return MenuFlyout(
-                        items: [
-                          MenuFlyoutItem(
-                            leading: const Icon(FluentIcons.delete),
-                            text: const Text('Remove'),
-                            onPressed: () {
-                              _moreController.close();
-                              _onRemove(state.bundledApplication);
-                            },
-                          ),
-                          MenuFlyoutItem(
-                            leading: const Icon(FluentIcons.edit),
-                            text: const Text('Edit'),
-                            onPressed: () {
-                              _moreController.close();
-                            },
-                          ),
-                        ],
-                      );
+                  controller: _moreController,
+                  content: (context) {
+                    return MenuFlyout(
+                      items: [
+                        MenuFlyoutItem(
+                          leading: const Icon(FluentIcons.delete),
+                          text: const Text('Remove'),
+                          onPressed: () {
+                            _moreController.close();
+                            _onRemove(state.bundledApplication);
+                          },
+                        ),
+                        MenuFlyoutItem(
+                          leading: const Icon(FluentIcons.edit),
+                          text: const Text('Edit'),
+                          onPressed: () {
+                            _moreController.close();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                  child: IconButton(
+                    icon: const Icon(FluentIcons.more),
+                    onPressed: () {
+                      _moreController.open();
                     },
-                    child: IconButton(
-                      icon: const Icon(FluentIcons.more),
-                      onPressed: () {
-                        _moreController.open();
-                      },
-                    )),
+                  ),
+                ),
                 const Divider(
                   direction: Axis.vertical,
                   size: 27,
@@ -133,8 +133,8 @@ class _AppItemState extends State<AppItem> {
                   clipBehavior: Clip.antiAlias,
                   child: bundledApplication.iconUrl != null
                       ? Image.network(
-                    bundledApplication.iconUrl!,
-                  )
+                          bundledApplication.iconUrl!,
+                        )
                       : null,
                 ),
                 Text(
@@ -169,8 +169,10 @@ class _AppItemState extends State<AppItem> {
                       ),
                       trailing: StreamBuilder<AuthenticationState>(
                         stream: context.read<AuthenticationRepository>().stream,
-                        builder: (context,
-                            AsyncSnapshot<AuthenticationState> snapshot,) {
+                        builder: (
+                          context,
+                          AsyncSnapshot<AuthenticationState> snapshot,
+                        ) {
                           if (lastBuild?.status == BuildStatus.inProgress) {
                             return Tooltip(
                               message: 'Cancel ${application?.displayName}',
@@ -181,7 +183,9 @@ class _AppItemState extends State<AppItem> {
                                 ),
                                 onPressed: snapshot.data?.isFullAccess == true
                                     ? () => context.read<AppItemBloc>().add(
-                                        AppItemEvent.cancelAllBuildRequested())
+                                          AppItemEvent
+                                              .cancelAllBuildRequested(),
+                                        )
                                     : null,
                               ),
                             );
@@ -194,8 +198,7 @@ class _AppItemState extends State<AppItem> {
                                 size: 16,
                               ),
                               onPressed: snapshot.data?.isFullAccess == true
-                                  ? () =>
-                                  context
+                                  ? () => context
                                       .read<AppItemBloc>()
                                       .add(AppItemEvent.buildAllRequested())
                                   : null,
