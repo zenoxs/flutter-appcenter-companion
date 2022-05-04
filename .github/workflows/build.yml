@@ -11,7 +11,22 @@ env:
   FLUTTER_VERSION: '2.10.5' 
 
 jobs:
+  analyze-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{env.FLUTTER_VERSION}}
+          channel: 'stable'
+          cache: true
+          architecture: x64
+      - run: flutter pub get
+      - run: flutter pub run build_runner build
+      - run: flutter analyze
+    # - run: flutter test // TODO: create tests
   build-macos:
+    needs: [ analyze-test ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,6 +49,7 @@ jobs:
           name: ac_companion-macos
           path: "dist/**/*.dmg"
   build-linux:
+    needs: [ analyze-test ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -58,6 +74,7 @@ jobs:
           name: ac_companion-linux
           path: "dist/**/*.deb"
   build-windows:
+    needs: [ analyze-test ]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
