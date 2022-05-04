@@ -12,6 +12,7 @@ class AuthenticationDialog extends StatefulWidget {
 class _AuthenticationDialogState extends State<AuthenticationDialog> {
   final TextEditingController _tokenController = TextEditingController();
   AuthenticationAccess _accessValue = AuthenticationAccess.readOnly;
+  bool _showToken = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,41 +60,51 @@ class _AuthenticationDialogState extends State<AuthenticationDialog> {
             stream: context.read<AuthenticationRepository>().stream,
             builder: (context, AsyncSnapshot<AuthenticationState> snapshot) {
               final token = snapshot.data?.maybeWhen(
-                    authenticated: (token, access) => token,
-                    orElse: () => null,
-                  ) ??
-                  '<none>';
+                authenticated: (token, access) => token,
+                orElse: () => null,
+              );
               final access = snapshot.data?.maybeWhen(
-                    authenticated: (token, access) => access.name,
-                    orElse: () => null,
-                  ) ??
-                  '<none>';
+                authenticated: (token, access) => access.name,
+                orElse: () => null,
+              );
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InfoLabel(
-                    label: 'Current access',
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
+                  if (access != null)
+                    InfoLabel(
+                      label: 'Current access',
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                      child: TextBox(
+                        readOnly: true,
+                        controller: TextEditingController(text: access),
+                        style: FluentTheme.of(context).typography.caption,
+                      ),
                     ),
-                    child: Text(
-                      access,
-                      style: FluentTheme.of(context).typography.caption,
+                  if (token != null)
+                    InfoLabel(
+                      label: 'Current token',
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                      child: TextBox(
+                        readOnly: true,
+                        obscureText: !_showToken,
+                        controller: TextEditingController(text: token),
+                        suffix: IconButton(
+                          icon: Icon(
+                            !_showToken ? FluentIcons.lock : FluentIcons.unlock,
+                          ),
+                          onPressed: () =>
+                              setState(() => _showToken = !_showToken),
+                        ),
+                        style: FluentTheme.of(context).typography.caption,
+                      ),
                     ),
-                  ),
-                  InfoLabel(
-                    label: 'Current token',
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
-                    child: SelectableText(
-                      token,
-                      style: FluentTheme.of(context).typography.caption,
-                    ),
-                  ),
                 ],
               );
             },

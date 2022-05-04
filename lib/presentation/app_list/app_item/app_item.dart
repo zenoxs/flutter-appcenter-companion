@@ -8,8 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AppItem extends StatelessWidget {
   final int bundledApplicationId;
 
-  const AppItem({Key? key, required this.bundledApplicationId})
-      : super(key: key);
+  const AppItem({
+    Key? key,
+    required this.bundledApplicationId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

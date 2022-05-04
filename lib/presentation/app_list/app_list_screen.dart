@@ -75,7 +75,9 @@ class AppListScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemBuilder: (context, index) {
                       final bundledApp = state.bundledApplications[index];
-                      return AppItem(bundledApplicationId: bundledApp.id);
+                      return AppItem(
+                        bundledApplicationId: bundledApp.id,
+                      );
                     },
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),
