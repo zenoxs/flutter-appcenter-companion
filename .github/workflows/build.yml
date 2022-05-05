@@ -4,9 +4,11 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
+  pull_request:
+    types: [ opened, reopened ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    
+
 env:
   FLUTTER_VERSION: '2.10.5' 
 
@@ -99,8 +101,9 @@ jobs:
           path: |
             dist/**/*.msix
             dist/**/*.exe
-  release:
-    needs: [build-macos, build-windows, build-linux]
+  deploy:
+    if: startsWith(github.head_ref, 'releases/') && github.event.pull_request.merged == true
+    needs: [ build-macos, build-windows, build-linux ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
