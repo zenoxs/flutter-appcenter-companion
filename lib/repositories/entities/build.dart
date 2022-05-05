@@ -22,6 +22,8 @@ class Build {
   @Property(type: PropertyType.date)
   final DateTime lastChangedDate;
   final String sourceVersion;
+  @Property(type: PropertyType.date)
+  final DateTime createdAt;
 
   final sourceBranch = ToOne<Branch>();
 
@@ -62,7 +64,8 @@ class Build {
     this.status = BuildStatus.unknown,
     this.result = BuildResult.unknown,
     required this.sourceVersion,
-  }) : super();
+  })  : createdAt = DateTime.now(),
+        super();
 
   factory Build.createFromDto(
     BuildDto lastBuild,

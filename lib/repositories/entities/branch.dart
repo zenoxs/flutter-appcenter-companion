@@ -5,6 +5,7 @@ import 'package:appcenter_companion/repositories/entities/build.dart';
 import 'package:objectbox/objectbox.dart';
 
 import 'application.dart';
+import 'commit.dart';
 
 @Entity()
 class Branch {
@@ -18,6 +19,8 @@ class Branch {
   final builds = ToMany<Build>();
 
   final lastBuild = ToOne<Build>();
+
+  final commit = ToOne<Commit>();
 
   final application = ToOne<Application>();
 
@@ -40,7 +43,11 @@ class Branch {
     branch.lastBuild.target = branchDto.lastBuild != null
         ? Build.createFromDto(branchDto.lastBuild!, branch, store)
         : null;
+
     branch.application.target = application;
+
+    branch.commit.target =
+        Commit.createFromDto(branchDto.branch.commit, branch, store);
 
     final QueryBuilder<Branch> builder =
         box.query(Branch_.name.equals(branch.name));

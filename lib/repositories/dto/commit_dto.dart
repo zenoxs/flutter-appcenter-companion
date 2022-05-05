@@ -9,6 +9,7 @@ part 'commit_dto.g.dart';
 class BranchCommitDto with _$BranchCommitDto {
   const factory BranchCommitDto(
     String sha,
+    String url,
     @JsonKey(nullable: true) CommitDto? commit,
     @JsonKey(nullable: true) AuthorAvatarDto? author,
   ) = _BranchCommitDto;

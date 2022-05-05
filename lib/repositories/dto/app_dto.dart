@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'app_dto.freezed.dart';
-
 part 'app_dto.g.dart';
 
 List<AppDto> appDtoFromJson(List<dynamic> data) =>
@@ -17,20 +16,21 @@ String appDtoToJson(List<AppDto> data) =>
 @freezed
 class AppDto with _$AppDto {
   const factory AppDto(String id,
-      String appSecret,
-      @JsonKey(nullable: true) String? description,
-      String displayName,
-      String name,
-      @JsonKey(unknownEnumValue: Os.unknown) Os os,
-      @JsonKey(unknownEnumValue: Platform.unknown) Platform platform,
-      String origin,
-      @JsonKey(nullable: true) String? iconUrl,
-      DateTime createdAt,
-      DateTime updatedAt,
-      String releaseType,
-      OwnerDto owner,
-      @JsonKey(nullable: true) AzureSubscription? azureSubscription,
-      List<MemberPermission> memberPermissions,) = _AppDto;
+    String appSecret,
+    @JsonKey(nullable: true) String? description,
+    String displayName,
+    String name,
+    @JsonKey(unknownEnumValue: Os.unknown) Os os,
+    @JsonKey(unknownEnumValue: Platform.unknown) Platform platform,
+    String origin,
+    @JsonKey(nullable: true) String? iconUrl,
+    DateTime createdAt,
+    DateTime updatedAt,
+    @JsonKey(nullable: true) String? releaseType,
+    OwnerDto owner,
+    @JsonKey(nullable: true) AzureSubscription? azureSubscription,
+    List<MemberPermission> memberPermissions,
+  ) = _AppDto;
 
   factory AppDto.fromJson(Map<String, dynamic> json) => _$AppDtoFromJson(json);
 }

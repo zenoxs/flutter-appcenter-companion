@@ -62,7 +62,7 @@
     },
     {
       "id": "2:7725313498476227107",
-      "lastPropertyId": "5:8526041391419141686",
+      "lastPropertyId": "6:4891292875636628435",
       "name": "Branch",
       "properties": [
         {
@@ -96,6 +96,14 @@
           "flags": 520,
           "indexId": "3:8387405097071159175",
           "relationTarget": "Application"
+        },
+        {
+          "id": "6:4891292875636628435",
+          "name": "commitId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:1841282456600929306",
+          "relationTarget": "Commit"
         }
       ],
       "relations": []
@@ -239,16 +247,41 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "9:6865311068030255026",
+      "lastPropertyId": "3:8654800295894891980",
+      "name": "Commit",
+      "properties": [
+        {
+          "id": "1:6377922126779268217",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:2114372554048930635",
+          "name": "url",
+          "type": 9
+        },
+        {
+          "id": "3:8654800295894891980",
+          "name": "sha",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:5017965644451687838",
-  "lastIndexId": "7:2949333759101658920",
+  "lastEntityId": "9:6865311068030255026",
+  "lastIndexId": "8:1841282456600929306",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    2994723913576838540
+    2994723913576838540,
+    8176665727360657497
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
@@ -262,7 +295,8 @@
     657706291220536415,
     6092950733586339550,
     575275366064354830,
-    720734127669596354
+    720734127669596354,
+    7767611473190849993
   ],
   "retiredRelationUids": [],
   "version": 1
