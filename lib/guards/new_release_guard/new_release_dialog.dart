@@ -38,7 +38,7 @@ class NewReleaseDialog extends StatelessWidget {
               FilledButton(
                 child: const Text('Update'),
                 onPressed: () {
-                  launchUrlString(state.url);
+                  launchUrlString(state.downloadUrl);
                   Navigator.of(context).pop();
                 },
               ),

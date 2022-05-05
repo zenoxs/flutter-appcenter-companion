@@ -6,7 +6,7 @@ class NewReleaseState with _$NewReleaseState {
 
   factory NewReleaseState.availableVersion({
     required String version,
-    required String url,
+    required String downloadUrl,
     @Default(false) bool currentReleaseIgnored,
   }) = NewReleaseStateAvailableVersion;
 }

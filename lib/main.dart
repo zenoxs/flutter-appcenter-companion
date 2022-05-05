@@ -73,12 +73,16 @@ Future<void> main() async {
   final GitHubRepository gitHubRepository = GitHubRepository(
     environment: environment,
   );
+  final ReleaseRepository releaseRepository = ReleaseRepository(
+    githubRepository: gitHubRepository,
+  );
 
   runApp(
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: environment),
         RepositoryProvider.value(value: store),
+        RepositoryProvider.value(value: releaseRepository),
         RepositoryProvider.value(value: authenticationRepository),
         RepositoryProvider.value(value: gitHubRepository),
         RepositoryProvider.value(value: appcenterHttp),

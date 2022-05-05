@@ -1,4 +1,4 @@
-import 'package:appcenter_companion/repositories/github_repository.dart';
+import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +15,7 @@ class NewReleaseGuard extends StatefulWidget {
 }
 
 class _NewReleaseGuardState extends State<NewReleaseGuard> {
-  late final cubit = NewReleaseCubit(context.read<GitHubRepository>());
+  late final cubit = NewReleaseCubit(context.read<ReleaseRepository>());
 
   @override
   Widget build(BuildContext context) {

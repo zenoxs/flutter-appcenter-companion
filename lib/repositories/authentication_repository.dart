@@ -6,7 +6,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'storage_repository.dart';
+import 'secure_storage_repository.dart';
 
 part 'authentication_repository.freezed.dart';
 part 'authentication_repository.g.dart';
@@ -45,13 +45,13 @@ extension AuthenticationHelpers on AuthenticationState {
 }
 
 class AuthenticationRepository {
-  final StorageRepository _storage;
+  final SecureStorageRepository _storage;
   final AppcenterHttp _http;
 
   AuthenticationRepository({
-    StorageRepository? storage,
+    SecureStorageRepository? storage,
     required AppcenterHttp http,
-  })  : _storage = storage ?? StorageRepository(),
+  })  : _storage = storage ?? SecureStorageRepository(),
         _http = http {
     _restoreAuth().then(
       (value) =>

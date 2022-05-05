@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StorageRepository {
-  StorageRepository() {
+class SecureStorageRepository {
+  SecureStorageRepository() {
     // Can't use secure storage on mac os if the app not signed, which will required a developer program account
     _useSecureStorage = !Platform.isMacOS;
   }
