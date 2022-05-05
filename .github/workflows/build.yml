@@ -14,6 +14,7 @@ env:
 
 jobs:
   analyze-test:
+    if: github.event_name != 'pull_request' || github.event.action == 'opened' || github.event.action == 'reopened' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
