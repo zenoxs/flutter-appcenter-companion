@@ -102,17 +102,17 @@ class BundledApplicationRepository {
       return value;
     });
     await Future.wait(
-      applications.map(_applicationRepository.fetchAppWithBranches),
+      applications.map(_applicationRepository.fetchWithBranches),
     );
   }
 
-  Future<void> addBundledApplication(
+  Future<void> add(
     BundledApplication bundledApplication,
   ) async {
     _box.put(bundledApplication);
   }
 
-  void removeBundledApplication(int bundledApplicationId) {
+  void remove(int bundledApplicationId) {
     _box.remove(bundledApplicationId);
   }
 }

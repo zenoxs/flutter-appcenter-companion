@@ -56,6 +56,7 @@ Future<void> main() async {
       AuthenticationInterceptor(authenticationRepository);
   appcenterHttp.interceptors.add(authenticationInterceptor);
 
+  // set up repositories
   final BranchRepository branchRepository =
       BranchRepository(appcenterHttp, store);
   final ApplicationRepository applicationRepository = ApplicationRepository(
@@ -69,6 +70,9 @@ Future<void> main() async {
     applicationRepository,
     appcenterHttp,
   );
+  final GitHubRepository gitHubRepository = GitHubRepository(
+    environment: environment,
+  );
 
   runApp(
     MultiRepositoryProvider(
@@ -76,6 +80,7 @@ Future<void> main() async {
         RepositoryProvider.value(value: environment),
         RepositoryProvider.value(value: store),
         RepositoryProvider.value(value: authenticationRepository),
+        RepositoryProvider.value(value: gitHubRepository),
         RepositoryProvider.value(value: appcenterHttp),
         RepositoryProvider.value(value: applicationRepository),
         RepositoryProvider.value(value: branchRepository),

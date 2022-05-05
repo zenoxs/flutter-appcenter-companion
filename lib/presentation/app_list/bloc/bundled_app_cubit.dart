@@ -39,7 +39,7 @@ class BundledAppCubit extends Cubit<BundledAppState> {
       linkedApplication.branch.target = branch;
       bundledApplication.linkedApplications.add(linkedApplication);
     }
-    _bundledApplicationRepository.addBundledApplication(bundledApplication);
+    _bundledApplicationRepository.add(bundledApplication);
   }
 
   Future<void> refresh() async {

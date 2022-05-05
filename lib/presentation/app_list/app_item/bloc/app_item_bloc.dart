@@ -217,7 +217,7 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
   }
 
   void _onRemoveRequested(Emitter<AppItemState> emit) {
-    _bundledApplicationRepository.removeBundledApplication(
+    _bundledApplicationRepository.remove(
       _bundledApplicationId,
     );
   }

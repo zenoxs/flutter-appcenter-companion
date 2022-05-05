@@ -1,6 +1,6 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/presentation/app_list/app_item/bloc/app_item_bloc.dart';
-import 'package:appcenter_companion/presentation/widgets/build_status_indicator.dart';
+import 'package:appcenter_companion/presentation/widgets/build_status_indicator_widget.dart';
 import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

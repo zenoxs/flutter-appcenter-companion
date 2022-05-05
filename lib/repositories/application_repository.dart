@@ -26,16 +26,16 @@ class ApplicationRepository {
         .watch(triggerImmediately: true);
   }
 
-  Future<Application> fetchAppWithBranches(Application application) async {
+  Future<Application> fetchWithBranches(Application application) async {
     final appDto = await _http
         .get('apps/${application.owner.target!.name}/${application.name}')
         .then((res) => AppDto.fromJson(res.data));
     final app = Application.createFromDto(appDto, _store);
-    await _branchRepository.fetchBranchByApplication(app);
+    await _branchRepository.fetchByApplication(app);
     return app;
   }
 
-  Future<List<Application>> fetchAllApps() async {
+  Future<List<Application>> fetchAll() async {
     final dtoApps =
         await _http.get('apps').then((value) => appDtoFromJson(value.data));
 

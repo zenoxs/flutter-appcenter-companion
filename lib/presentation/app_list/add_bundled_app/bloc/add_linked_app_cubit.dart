@@ -20,7 +20,7 @@ class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
         applicationRepository.applications.listen((event) {
       emit(state.copyWith(applications: event.find()));
     });
-    _applicationRepository.fetchAllApps();
+    _applicationRepository.fetchAll();
   }
 
   final ApplicationRepository _applicationRepository;
@@ -36,7 +36,7 @@ class AddLinkedAppCubit extends Cubit<AddLinkedAppState> {
         loadingBranches: true,
       ),
     );
-    _branchRepository.fetchBranchByApplication(application).then((branches) {
+    _branchRepository.fetchByApplication(application).then((branches) {
       final configuredBranches =
           branches.where((branch) => branch.configured).toList();
       emit(

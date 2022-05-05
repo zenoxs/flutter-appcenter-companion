@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appcenter_companion/guards/new_release_guard/new_release_guard.dart';
 import 'package:appcenter_companion/presentation/home/home_screen.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
@@ -27,7 +28,7 @@ class _AppState extends State<App> {
           title: 'Appcenter Companion',
           color: appTheme.color,
           themeMode: appTheme.mode,
-          home: const HomeScreen(),
+          home: const NewReleaseGuard(child: HomeScreen()),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
             accentColor: appTheme.color,
