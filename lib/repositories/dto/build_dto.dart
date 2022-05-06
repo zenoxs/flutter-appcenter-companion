@@ -20,11 +20,23 @@ class BuildDto with _$BuildDto {
         BuildResult? result,
     String reason,
     String sourceBranch,
-      String sourceVersion,
-      List<String> tags,) = _BuildDto;
+    String sourceVersion,
+    List<String> tags,
+  ) = _BuildDto;
 
   factory BuildDto.fromJson(Map<String, dynamic> json) =>
       _$BuildDtoFromJson(json);
+}
+
+@freezed
+class BuildActionDto with _$BuildActionDto {
+  @JsonSerializable(fieldRename: FieldRename.none)
+  const factory BuildActionDto(
+    BuildStatus status,
+  ) = _BuildActionDto;
+
+  factory BuildActionDto.fromJson(Map<String, dynamic> json) =>
+      _$BuildActionDtoFromJson(json);
 }
 
 enum BuildStatus { completed, notStarted, inProgress, cancelling, unknown }

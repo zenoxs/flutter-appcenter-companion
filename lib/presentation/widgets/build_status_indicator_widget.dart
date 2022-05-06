@@ -55,7 +55,11 @@ class BuildStatusIndicator extends StatelessWidget {
         builder: (context, child, double value) {
           return Transform.rotate(
             angle: pi * value,
-            child: iconWidget,
+            child: Icon(
+              icon,
+              color: color,
+              size: size,
+            ),
           );
         },
         duration: const Duration(milliseconds: 1500),

@@ -14,9 +14,12 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
   AppItemBloc({
     required int bundledApplicationId,
     required BundledApplicationRepository bundledApplicationRepository,
+    required BranchRepository branchRepository,
     required Store store,
-  })  : _store = store,
+  })
+      : _store = store,
         _bundledApplicationId = bundledApplicationId,
+        _branchRepository = branchRepository,
         _bundledApplicationRepository = bundledApplicationRepository,
         super(
           AppItemState(
@@ -37,11 +40,14 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
       (event, emit) => _onRemoveRequested(emit),
     );
 
+    on<AppItemEventBuildRequested>(_onBuildRequested);
+
     _setupListeners();
   }
 
   final int _bundledApplicationId;
   final BundledApplicationRepository _bundledApplicationRepository;
+  final BranchRepository _branchRepository;
   final Store _store;
   late final StreamSubscription _bundledApplicationSubscription;
   final Map<String, List<StreamSubscription>> _subscriptions = {};
@@ -220,6 +226,11 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
     _bundledApplicationRepository.remove(
       _bundledApplicationId,
     );
+  }
+
+  void _onBuildRequested(
+      AppItemEventBuildRequested event, Emitter<AppItemState> emit) {
+    _branchRepository.build(event.linkedApplication.branch.target!);
   }
 
   void _cancelAllSubscriptions() {

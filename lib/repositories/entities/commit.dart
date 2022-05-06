@@ -1,6 +1,5 @@
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/dto/commit_dto.dart';
-
 // ignore: unnecessary_import
 import 'package:objectbox/objectbox.dart';
 
@@ -11,8 +10,8 @@ class Commit {
   @Id(assignable: true)
   int id;
 
-  String url;
-  String sha;
+  final String url;
+  final String sha;
 
   @Property(type: PropertyType.date)
   final DateTime createdAt;
@@ -21,8 +20,8 @@ class Commit {
     this.id = 0,
     required this.url,
     required this.sha,
-  })  : createdAt = DateTime.now(),
-        super();
+    required this.createdAt,
+  }) : super();
 
   factory Commit.createFromDto(
     BranchCommitDto branchCommitDto,
@@ -40,6 +39,7 @@ class Commit {
     final commit = Commit(
       url: branchCommitDto.url,
       sha: branchCommitDto.sha,
+      createdAt: DateTime.now(),
     );
 
     box.put(commit);

@@ -38,4 +38,23 @@ class BranchRepository {
 
     return appBranches;
   }
+
+  Future<void> build(Branch branch) async {
+    final buildBranch =
+        BuildBranchDto(sourceVersion: branch.commit.target!.sha);
+    final result = await _http.post(
+      'apps/${branch.application.target!.owner.target!.name}/${branch.application.target!.name}/branches/${branch.name}/builds',
+      data: buildBranch.toJson(),
+    );
+  }
+
+  Future<void> cancelBuild(Branch branch) async {
+    final lastBuild = branch.lastBuild.target;
+    if (lastBuild != null) {
+      final result = await _http.post(
+        'apps/${branch.application.target!.owner.target!.name}/${branch.application.target!.name}/builds/${lastBuild.id}',
+        data: const BuildActionDto(BuildStatus.cancelling).toJson(),
+      );
+    }
+  }
 }

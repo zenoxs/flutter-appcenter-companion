@@ -10,6 +10,7 @@ class BundledApplication {
   @Backlink('bundledApplication')
   final linkedApplications = ToMany<LinkedApplication>();
 
+  @Transient()
   String? get iconUrl {
     String? url;
     for (final linkedApp in linkedApplications) {

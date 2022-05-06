@@ -22,6 +22,7 @@ class _AppItemState extends State<AppItem> {
   late final _bloc = AppItemBloc(
     bundledApplicationId: widget.bundledApplicationId,
     bundledApplicationRepository: context.read<BundledApplicationRepository>(),
+    branchRepository: context.read<BranchRepository>(),
     store: context.read<Store>(),
   );
 
@@ -198,9 +199,9 @@ class _AppItemState extends State<AppItem> {
                                 size: 16,
                               ),
                               onPressed: snapshot.data?.isFullAccess == true
-                                  ? () => context
-                                      .read<AppItemBloc>()
-                                      .add(AppItemEvent.buildAllRequested())
+                                  ? () =>
+                                  context.read<AppItemBloc>().add(
+                                      AppItemEvent.buildRequested(linkedApp))
                                   : null,
                             ),
                           );

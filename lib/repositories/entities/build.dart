@@ -64,8 +64,8 @@ class Build {
     this.status = BuildStatus.unknown,
     this.result = BuildResult.unknown,
     required this.sourceVersion,
-  })  : createdAt = DateTime.now(),
-        super();
+    required this.createdAt,
+  }) : super();
 
   factory Build.createFromDto(
     BuildDto lastBuild,
@@ -84,6 +84,7 @@ class Build {
       status: lastBuild.status,
       result: lastBuild.result,
       sourceVersion: lastBuild.sourceVersion,
+      createdAt: DateTime.now(),
     );
     build.sourceBranch.target = branch;
 
