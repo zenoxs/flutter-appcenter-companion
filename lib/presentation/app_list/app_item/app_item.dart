@@ -5,6 +5,8 @@ import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'build_branch_button_widget.dart';
+
 class AppItem extends StatefulWidget {
   final int bundledApplicationId;
 
@@ -48,42 +50,16 @@ class _AppItemState extends State<AppItem> {
                         ),
                   ),
                 ),
-                StreamBuilder<AuthenticationState>(
-                  stream: context.read<AuthenticationRepository>().stream,
-                  builder:
-                      (context, AsyncSnapshot<AuthenticationState> snapshot) {
-                    if (state.status == BuildStatus.inProgress ||
-                        state.status == BuildStatus.notStarted) {
-                      return Tooltip(
-                        message: 'Cancel builds',
-                        child: IconButton(
-                          icon: const Icon(
-                            FluentIcons.circle_stop,
-                            size: 16,
-                          ),
-                          onPressed: snapshot.data?.isFullAccess == true
-                              ? () => context
-                                  .read<AppItemBloc>()
-                                  .add(AppItemEvent.cancelAllBuildRequested())
-                              : null,
-                        ),
-                      );
-                    }
-                    return Tooltip(
-                      message: 'Build all applications',
-                      child: IconButton(
-                        icon: const Icon(
-                          FluentIcons.play,
-                          size: 16,
-                        ),
-                        onPressed: snapshot.data?.isFullAccess == true
-                            ? () => context
-                                .read<AppItemBloc>()
-                                .add(AppItemEvent.buildAllRequested())
-                            : null,
-                      ),
-                    );
-                  },
+                BuildBranchButtonWidget(
+                  status: state.status,
+                  tooltipBuild: 'Build all applications',
+                  tooltipCancelBuild: 'Cancel all build applications',
+                  onBuild: () => context
+                      .read<AppItemBloc>()
+                      .add(AppItemEvent.buildAllRequested()),
+                  onCancelBuild: () => context
+                      .read<AppItemBloc>()
+                      .add(AppItemEvent.cancelAllBuildRequested()),
                 ),
                 Flyout(
                   controller: _moreController,
@@ -169,46 +145,19 @@ class _AppItemState extends State<AppItem> {
                           ),
                         ],
                       ),
-                      trailing: StreamBuilder<AuthenticationState>(
-                        stream: context.read<AuthenticationRepository>().stream,
-                        builder: (
-                          context,
-                          AsyncSnapshot<AuthenticationState> snapshot,
-                        ) {
-                          if (lastBuild?.status == BuildStatus.inProgress ||
-                              lastBuild?.status == BuildStatus.notStarted) {
-                            return Tooltip(
-                              message: 'Cancel ${application?.displayName}',
-                              child: IconButton(
-                                icon: const Icon(
-                                  FluentIcons.circle_stop,
-                                  size: 16,
-                                ),
-                                onPressed: snapshot.data?.isFullAccess == true
-                                    ? () => context.read<AppItemBloc>().add(
-                                          AppItemEvent.cancelBuildRequest(
-                                            linkedApp,
-                                          ),
-                                        )
-                                    : null,
+                      trailing: BuildBranchButtonWidget(
+                        status: state.status,
+                        tooltipBuild: 'Build ${application?.displayName}',
+                        tooltipCancelBuild:
+                            'Cancel ${application?.displayName}',
+                        onBuild: () => context
+                            .read<AppItemBloc>()
+                            .add(AppItemEvent.buildRequested(linkedApp)),
+                        onCancelBuild: () => context.read<AppItemBloc>().add(
+                              AppItemEvent.cancelBuildRequest(
+                                linkedApp,
                               ),
-                            );
-                          }
-                          return Tooltip(
-                            message: 'Build ${application?.displayName}',
-                            child: IconButton(
-                              icon: const Icon(
-                                FluentIcons.play,
-                                size: 16,
-                              ),
-                              onPressed: snapshot.data?.isFullAccess == true
-                                  ? () => context.read<AppItemBloc>().add(
-                                        AppItemEvent.buildRequested(linkedApp),
-                                      )
-                                  : null,
                             ),
-                          );
-                        },
                       ),
                       subtitle: Text(branch?.name ?? '-'),
                     );
