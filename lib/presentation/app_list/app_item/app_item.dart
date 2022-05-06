@@ -52,12 +52,13 @@ class _AppItemState extends State<AppItem> {
                   stream: context.read<AuthenticationRepository>().stream,
                   builder:
                       (context, AsyncSnapshot<AuthenticationState> snapshot) {
-                    if (state.status == BuildStatus.inProgress) {
+                    if (state.status == BuildStatus.inProgress ||
+                        state.status == BuildStatus.notStarted) {
                       return Tooltip(
                         message: 'Cancel builds',
                         child: IconButton(
                           icon: const Icon(
-                            FluentIcons.processing_cancel,
+                            FluentIcons.circle_stop,
                             size: 16,
                           ),
                           onPressed: snapshot.data?.isFullAccess == true
@@ -72,7 +73,7 @@ class _AppItemState extends State<AppItem> {
                       message: 'Build all applications',
                       child: IconButton(
                         icon: const Icon(
-                          FluentIcons.build,
+                          FluentIcons.play,
                           size: 16,
                         ),
                         onPressed: snapshot.data?.isFullAccess == true
@@ -174,18 +175,20 @@ class _AppItemState extends State<AppItem> {
                           context,
                           AsyncSnapshot<AuthenticationState> snapshot,
                         ) {
-                          if (lastBuild?.status == BuildStatus.inProgress) {
+                          if (lastBuild?.status == BuildStatus.inProgress ||
+                              lastBuild?.status == BuildStatus.notStarted) {
                             return Tooltip(
                               message: 'Cancel ${application?.displayName}',
                               child: IconButton(
                                 icon: const Icon(
-                                  FluentIcons.processing_cancel,
+                                  FluentIcons.circle_stop,
                                   size: 16,
                                 ),
                                 onPressed: snapshot.data?.isFullAccess == true
                                     ? () => context.read<AppItemBloc>().add(
-                                          AppItemEvent
-                                              .cancelAllBuildRequested(),
+                                          AppItemEvent.cancelBuildRequest(
+                                            linkedApp,
+                                          ),
                                         )
                                     : null,
                               ),
@@ -195,13 +198,13 @@ class _AppItemState extends State<AppItem> {
                             message: 'Build ${application?.displayName}',
                             child: IconButton(
                               icon: const Icon(
-                                FluentIcons.build,
+                                FluentIcons.play,
                                 size: 16,
                               ),
                               onPressed: snapshot.data?.isFullAccess == true
-                                  ? () =>
-                                  context.read<AppItemBloc>().add(
-                                      AppItemEvent.buildRequested(linkedApp))
+                                  ? () => context.read<AppItemBloc>().add(
+                                        AppItemEvent.buildRequested(linkedApp),
+                                      )
                                   : null,
                             ),
                           );

@@ -42,7 +42,7 @@ class BranchRepository {
   Future<void> build(Branch branch) async {
     final buildBranch =
         BuildBranchDto(sourceVersion: branch.commit.target!.sha);
-    final result = await _http.post(
+    await _http.post(
       'apps/${branch.application.target!.owner.target!.name}/${branch.application.target!.name}/branches/${branch.name}/builds',
       data: buildBranch.toJson(),
     );
@@ -51,8 +51,8 @@ class BranchRepository {
   Future<void> cancelBuild(Branch branch) async {
     final lastBuild = branch.lastBuild.target;
     if (lastBuild != null) {
-      final result = await _http.post(
-        'apps/${branch.application.target!.owner.target!.name}/${branch.application.target!.name}/builds/${lastBuild.id}',
+      await _http.patch(
+        'apps/${branch.application.target!.owner.target!.name}/${branch.application.target!.name}/builds/${lastBuild.buildId}',
         data: const BuildActionDto(BuildStatus.cancelling).toJson(),
       );
     }

@@ -11,7 +11,7 @@ class AppItemEvent with _$AppItemEvent {
   factory AppItemEvent.buildRequested(LinkedApplication linkedApplication) =
       AppItemEventBuildRequested;
 
-  factory AppItemEvent.cancelRequest(LinkedApplication linkedApplication) =
+  factory AppItemEvent.cancelBuildRequest(LinkedApplication linkedApplication) =
       AppItemEventCancelBuildRequested;
 
   factory AppItemEvent.cancelAllBuildRequested() =

@@ -16,8 +16,7 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
     required BundledApplicationRepository bundledApplicationRepository,
     required BranchRepository branchRepository,
     required Store store,
-  })
-      : _store = store,
+  })  : _store = store,
         _bundledApplicationId = bundledApplicationId,
         _branchRepository = branchRepository,
         _bundledApplicationRepository = bundledApplicationRepository,
@@ -41,6 +40,7 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
     );
 
     on<AppItemEventBuildRequested>(_onBuildRequested);
+    on<AppItemEventCancelBuildRequested>(_onCancelBuildRequested);
 
     _setupListeners();
   }
@@ -228,9 +228,18 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
     );
   }
 
-  void _onBuildRequested(
-      AppItemEventBuildRequested event, Emitter<AppItemState> emit) {
+  FutureOr<void> _onBuildRequested(
+    AppItemEventBuildRequested event,
+    Emitter<AppItemState> emit,
+  ) {
     _branchRepository.build(event.linkedApplication.branch.target!);
+  }
+
+  FutureOr<void> _onCancelBuildRequested(
+    AppItemEventCancelBuildRequested event,
+    Emitter<AppItemState> emit,
+  ) {
+    _branchRepository.cancelBuild(event.linkedApplication.branch.target!);
   }
 
   void _cancelAllSubscriptions() {
