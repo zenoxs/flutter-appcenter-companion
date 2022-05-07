@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appcenter_companion/objectbox.g.dart';
 import 'package:appcenter_companion/repositories/repositories.dart';
 import 'package:bloc/bloc.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -52,92 +53,80 @@ class AppItemBloc extends Bloc<AppItemEvent, AppItemState> {
   late final StreamSubscription _bundledApplicationSubscription;
   final Map<String, List<StreamSubscription>> _subscriptions = {};
 
+  void _watchItem<T>({
+    Condition<T>? qc,
+    VoidCallback? onChange,
+    String? subName,
+    String? dependsOn,
+  }) {
+    void _onChange() {
+      if (subName != null) {
+        _subscriptions[subName]?.forEach((sub) => sub.cancel());
+        _subscriptions[subName] = [];
+      }
+      onChange?.call();
+    }
+
+    final sub = _store
+        .box<T>()
+        .query(qc)
+        .watch()
+        .doOnData(
+          (_) => add(AppItemEvent.updated()),
+        )
+        .listen((_) => _onChange());
+
+    _onChange();
+
+    if (dependsOn != null) {
+      _subscriptions[dependsOn]!.add(sub);
+    }
+  }
+
   void _setupListeners() {
     final bundledApp = state.bundledApplication;
     final bundledAppSubName = 'bundledApp_${bundledApp.id}';
 
-    void _onBundledAppChanged() {
-      _subscriptions[bundledAppSubName]?.forEach((sub) => sub.cancel());
-      _subscriptions[bundledAppSubName] = [];
+    _watchItem<BundledApplication>(
+      subName: bundledAppSubName,
+      qc: BundledApplication_.id.equals(_bundledApplicationId),
+      onChange: () {
+        for (final linkedApp in state.bundledApplication.linkedApplications) {
+          final linkedAppSubName = 'linkedApp_${linkedApp.id}';
 
-      for (final linkedApp in state.bundledApplication.linkedApplications) {
-        final linkedAppSubName = 'linkedApp_${linkedApp.id}';
-        _subscriptions[linkedAppSubName] = [];
+          _watchItem<LinkedApplication>(
+            subName: linkedAppSubName,
+            qc: LinkedApplication_.id.equals(linkedApp.id),
+            dependsOn: bundledAppSubName,
+            onChange: () {
+              final branch = linkedApp.branch.target!;
+              final branchSubName = 'branch_${branch.id}';
 
-        void _onLinkedAppChanged() {
-          _subscriptions[linkedAppSubName]?.forEach((sub) => sub.cancel());
-          _subscriptions[linkedAppSubName] = [];
+              _watchItem<Branch>(
+                qc: Branch_.id.equals(branch.id),
+                subName: branchSubName,
+                dependsOn: linkedAppSubName,
+                onChange: () {
+                  final application = branch.application.target!;
+                  _watchItem<Application>(
+                    qc: Application_.id.equals(application.id),
+                    dependsOn: branchSubName,
+                  );
 
-          final branch = linkedApp.branch.target!;
-          final branchSubName = 'branch_${branch.id}';
-
-          void _onBranchChanged() {
-            _subscriptions[branchSubName]?.forEach((sub) => sub.cancel());
-            _subscriptions[branchSubName] = [];
-
-            final application = branch.application.target!;
-            final applicationSub = _store
-                .box<Application>()
-                .query(Application_.id.equals(application.id))
-                .watch()
-                .doOnData(
-                  (_) => add(AppItemEvent.updated()),
-                ) //
-                .listen((_) => {});
-            _subscriptions[branchSubName]!.add(applicationSub);
-
-            final lastBuild = branch.lastBuild.target;
-            if (lastBuild != null) {
-              final lastBuildSub = _store
-                  .box<Build>()
-                  .query(Build_.id.equals(lastBuild.id))
-                  .watch()
-                  .doOnData(
-                    (_) => add(AppItemEvent.updated()),
-                  ) //
-                  .listen((_) => {});
-              _subscriptions[branchSubName]!.add(lastBuildSub);
-            }
-          }
-
-          final subBranch = _store
-              .box<Branch>()
-              .query(Branch_.id.equals(linkedApp.branch.target!.id))
-              .watch()
-              .doOnData(
-                (_) => add(AppItemEvent.updated()),
-              ) //
-              .listen((_) => _onBranchChanged());
-          _subscriptions[linkedAppSubName]!.add(subBranch);
-
-          _onBranchChanged();
+                  final lastBuild = branch.lastBuild.target;
+                  if (lastBuild != null) {
+                    _watchItem<Build>(
+                      qc: Build_.id.equals(lastBuild.id),
+                      dependsOn: branchSubName,
+                    );
+                  }
+                },
+              );
+            },
+          );
         }
-
-        final subLinkedApp = _store
-            .box<LinkedApplication>()
-            .query(LinkedApplication_.id.equals(linkedApp.id))
-            .watch()
-            .doOnData(
-              (_) => add(AppItemEvent.updated()),
-            ) //
-            .listen((_) => _onLinkedAppChanged());
-        _subscriptions[bundledAppSubName]!.add(subLinkedApp);
-
-        _onLinkedAppChanged();
-      }
-    }
-
-    _bundledApplicationSubscription = _store
-        .box<BundledApplication>()
-        .query(BundledApplication_.id.equals(_bundledApplicationId))
-        .watch()
-        .distinct()
-        .doOnData(
-          (_) => add(AppItemEvent.updated()),
-        ) //
-        .listen((_) => _onBundledAppChanged());
-
-    _onBundledAppChanged();
+      },
+    );
   }
 
   static BuildResult _buildResult(Store store, int bundledApplicationId) {

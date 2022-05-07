@@ -146,7 +146,7 @@ class _AppItemState extends State<AppItem> {
                         ],
                       ),
                       trailing: BuildBranchButtonWidget(
-                        status: state.status,
+                        status: lastBuild?.status,
                         tooltipBuild: 'Build ${application?.displayName}',
                         tooltipCancelBuild:
                             'Cancel ${application?.displayName}',

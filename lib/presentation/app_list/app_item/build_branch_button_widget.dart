@@ -6,12 +6,13 @@ import 'package:provider/provider.dart';
 class BuildBranchButtonWidget extends StatelessWidget {
   const BuildBranchButtonWidget({
     Key? key,
-    required this.status,
+    BuildStatus? status,
     required this.onBuild,
     required this.onCancelBuild,
     this.tooltipBuild,
     this.tooltipCancelBuild,
-  }) : super(key: key);
+  })  : status = status ?? BuildStatus.unknown,
+        super(key: key);
 
   final String? tooltipBuild;
   final String? tooltipCancelBuild;

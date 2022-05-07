@@ -102,13 +102,13 @@ extension ThemeExt on ThemeData {
     if (brightness.isLight) {
       return Colors.green;
     }
-    return Colors.green.dark;
+    return Colors.green.light;
   }
 
   Color get dangerColor {
     if (brightness.isLight) {
       return Colors.red;
     }
-    return Colors.red.dark;
+    return Colors.red;
   }
 }
